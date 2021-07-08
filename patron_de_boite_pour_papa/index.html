@@ -81,6 +81,7 @@
     var largeur = document.getElementById('largeur');
     ctx.lineWidth = largeur.value;
     texte.innerHTML = "Largeur (" + largeur.value + ")";
+        drawP();
     }
 
     /* change la taille de la hauteur */
@@ -89,6 +90,7 @@
     var hauteur = document.getElementById('hauteur');
     ctx.lineWidth = hauteur.value;
     texte.innerHTML = "Hauteur (" + hauteur.value + ")";
+        drawP();
     }
 
     /* change la taille de la profondeur */
@@ -97,6 +99,7 @@
     var profondeur = document.getElementById('profondeur');
     ctx.lineWidth = profondeur.value;
     texte.innerHTML = "Profondeur (" + profondeur.value + ")";
+        drawP();
     }
 
     /* remet tout à zéro */
@@ -110,7 +113,32 @@
     function convertPxToCm() {}
 
     /* dessine le patron */
-    function drawP() {}
+    function drawP() {
+        var largeur = document.getElementById('largeur');
+        var hauteur = document.getElementById('hauteur');
+        var profondeur = document.getElementById('profondeur');
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(10, 10);
+        ctx.lineTo(10, largeur.value*5);
+        ctx.moveTo(10, 10);
+        ctx.lineTo(hauteur.value*5, 10);
+        ctx.moveTo(10, 10);
+        let pythagore = Math.round(Math.sqrt(Math.pow(profondeur.value,2)/2));
+        ctx.lineTo(pythagore*5, pythagore*5); // pythagore
+        ctx.stroke();
+        console.log(pythagore);
+        /*
+
+        pv² = x² + y²
+        x = y
+
+        pv² = x.x + y.y = x.x + x.x = 2(x²)
+        (pv²)/2 = x²
+        rac((pv²)/2) = x
+
+        */
+    }
 
     /* dessine le canevas */
     function drawC() {
