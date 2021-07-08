@@ -106,8 +106,8 @@
     }
 
     /* convertit les cm en pixels */
-    function convertCmToPx(mm) {
-        return (96 / 2.54) * mm;        // https://www.pixelto.net/cm-to-px-converter
+    function convertCmToPx(cm) {
+        return (96 / 2.54) * cm;        // https://www.pixelto.net/cm-to-px-converter
     }
 
     /* convertit les pixels en cm */
@@ -115,22 +115,36 @@
         return (2.54 / 96) * px;    // https://www.pixelto.net/px-to-cm-converter
     }
 
+    /* convertit les mm en pixels */
+    function convertMmToPx(mm) {
+        return convertCmToPx(mm) / 10;
+    }
+
+    /* convertit les pixels en mm */
+    function convertPxToMm(px) {
+        return convertPxToCm(px) * 10;
+    }
+
     /* dessine le patron */
     function drawP() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
         var largeur = document.getElementById('largeur');
         var hauteur = document.getElementById('hauteur');
         var profondeur = document.getElementById('profondeur');
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.moveTo(convertCmToPx(10), convertCmToPx(10));
-        ctx.lineTo(convertCmToPx(10), largeur.value*5);
-        ctx.moveTo(convertCmToPx(10), convertCmToPx(10));
-        ctx.lineTo(hauteur.value*5, convertCmToPx(10));
-        ctx.moveTo(convertCmToPx(10), convertCmToPx(10));
+        ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
+        ctx.lineTo(convertMmToPx(largeur.value), convertCmToPx(5));
+        //console.log(largeur.value);
+        //console.log(convertMmToPx(largeur.value));
+        ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
+        ctx.lineTo(convertCmToPx(5), convertMmToPx(hauteur.value));
+        ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
         let pythagore = Math.round(Math.sqrt(Math.pow(profondeur.value,2)/2));
-        ctx.lineTo(pythagore*5, pythagore*5); // pythagore
+        ctx.lineTo(convertMmToPx(pythagore), convertMmToPx(pythagore)); // pythagore*/
         ctx.stroke();
-        console.log(pythagore);
+        //console.log(pythagore);
         /*
 
         pv² = x² + y²
@@ -176,6 +190,11 @@
         ctx.moveTo(10, 10);
         ctx.lineTo(10, 37+10);
         ctx.stroke();
+
+        /*
+        (0,y) |
+        (x,0) -
+        */
     }
 </script>
 
