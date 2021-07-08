@@ -4,6 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patron de boite pour les jeux de papa</title>
+    <style>
+
+    input[type='range'] {
+      overflow: hidden;
+      width: 80px;
+      -webkit-appearance: none;
+    }
+    
+    input[type='range']::-webkit-slider-thumb {
+      width: 10px;
+      -webkit-appearance: none;
+      height: 10px;
+      cursor: pointer;
+    border-radius: 15px;
+    }
+
+    #largeur {
+      background-color: #8cfcfc;
+    }
+
+    #largeur::-webkit-slider-thumb {
+      background: #000fff;
+      box-shadow: -80px 0 0 80px #00ffff;
+    }
+
+    #hauteur {
+      background-color: #90fdca;
+    }
+
+    #hauteur::-webkit-slider-thumb {
+      background: #029450;
+      box-shadow: -80px 0 0 80px #00ff88;
+    }
+
+    #profondeur {
+      background-color: #fd92da;
+    }
+
+    #profondeur::-webkit-slider-thumb {
+      background: #5f0340;
+      box-shadow: -80px 0 0 80px #ff00aa;
+    }
+
+    </style>
 </head>
 
 <body onload="drawC();">
@@ -12,10 +56,13 @@
     <h6>Reset</h6>
     <button onclick="reset();" style="width: 50px;height: 20px;">Ø</button>
     <h6></h6>
-    <input id="penSize" type="range" min="1" max="50" value="2" onchange="changePenSize();">
+    <input id="largeur" type="range" min="1" max="50" value="2" onchange="changeLargeur();" >
+    <h6></h6>
+    <input id="hauteur" type="range" min="1" max="50" value="2" onchange="changeHauteur();">
+    <h6></h6>
+    <input id="profondeur" type="range" min="1" max="50" value="2" onchange="changeProfondeur();">
     <h6>Download</h6>
     <a className="download-link" href="" download="monImage.png">⇓ here ⇓</a>
-    <p>/!\ Attention! Télécharger votre dessin l'effacera du canevas !</p>
 </body>
 
 <script>
@@ -28,23 +75,60 @@
         evt.target.href = dataURL;
     });
 
+    /* change la taille de la largeur */
+    function changeLargeur() {
+    var texte = document.getElementsByTagName('h6')[1];
+    var largeur = document.getElementById('largeur');
+    ctx.lineWidth = largeur.value;
+    texte.innerHTML = "Largeur (" + largeur.value + ")";
+    }
+
+    /* change la taille de la hauteur */
+    function changeHauteur() {
+    var texte = document.getElementsByTagName('h6')[2];
+    var hauteur = document.getElementById('hauteur');
+    ctx.lineWidth = hauteur.value;
+    texte.innerHTML = "Hauteur (" + hauteur.value + ")";
+    }
+
+    /* change la taille de la profondeur */
+    function changeProfondeur() {
+    var texte = document.getElementsByTagName('h6')[3];
+    var profondeur = document.getElementById('profondeur');
+    ctx.lineWidth = profondeur.value;
+    texte.innerHTML = "Profondeur (" + profondeur.value + ")";
+    }
+
     /* remet tout à zéro */
     function reset() {
-        document.getElementsByTagName('h6')[4].innerHTML = "Size (" + 2 + ")";
+        document.getElementsByTagName('h6')[1].innerHTML = "Size (" + 2 + ")";
         ctx.clearRect(1, 1, canvas.width - 2, canvas.height - 2);
         ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
     }
 
+    /* convertit les cm en pixels */
+    function convertPxToCm() {}
+
+    /* dessine le patron */
+    function drawP() {}
+
     /* dessine le canevas */
     function drawC() {
-        var texte = document.getElementsByTagName('h6')[4];
-        ctx.lineWidth = 5;
+        var texteL = document.getElementsByTagName('h6')[1];
+        var largeur = document.getElementById('largeur');
+        var texteH = document.getElementsByTagName('h6')[2];
+        var hauteur = document.getElementById('hauteur');
+        var texteP = document.getElementsByTagName('h6')[3];
+        var profondeur = document.getElementById('profondeur');
+        ctx.lineWidth = 2;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         //console.log(bgColor.value);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
-        texte.innerHTML = "Size (" + "taille" + ")";
+        texteL.innerHTML = "Largeur (" + largeur.value + ")";
+        texteH.innerHTML = "Hauteur (" + hauteur.value + ")";
+        texteP.innerHTML = "Profondeur (" + profondeur.value + ")";
         ctx.strokeStyle = "#000000"
         ctx.moveTo(0, 0);
         ctx.lineTo(0, 400);
