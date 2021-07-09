@@ -78,13 +78,15 @@
         evt.target.href = dataURL;
     });
 
+
+
     /* change la taille de la largeur */
     function changeLargeur() {
     var texte = document.getElementsByTagName('h6')[1];
     var largeur = document.getElementById('largeur');
     ctx.lineWidth = largeur.value;
     texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
-        drawP();
+    drawP();
     }
 
     /* change la taille de la hauteur */
@@ -93,7 +95,7 @@
     var hauteur = document.getElementById('hauteur');
     ctx.lineWidth = hauteur.value;
     texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + "cm)";
-        drawP();
+    drawP();
     }
 
     /* change la taille de la profondeur */
@@ -102,7 +104,7 @@
     var profondeur = document.getElementById('profondeur');
     ctx.lineWidth = profondeur.value;
     texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + "cm)";
-        drawP();
+    drawP();
     }
 
     /* convertit les cm en pixels */
@@ -133,7 +135,12 @@
         var hauteur = document.getElementById('hauteur');
         var profondeur = document.getElementById('profondeur');
         ctx.lineWidth = 2;
-        ctx.beginPath();
+
+        var l = convertMmToPx(largeur.value);
+        var h = convertMmToPx(hauteur.value);
+        var p = convertMmToPx(profondeur.value);
+
+        /*ctx.beginPath();
         ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
         ctx.lineTo(convertMmToPx(largeur.value), convertCmToPx(5));
         //console.log(largeur.value);
@@ -142,8 +149,37 @@
         ctx.lineTo(convertCmToPx(5), convertMmToPx(hauteur.value));
         ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
         let pythagore = Math.round(Math.sqrt(Math.pow(profondeur.value,2)/2));
-        ctx.lineTo(convertMmToPx(pythagore), convertMmToPx(pythagore)); // pythagore*/
+        ctx.lineTo(convertMmToPx(pythagore), convertMmToPx(pythagore)); // pythagore
+        ctx.stroke();*/
+
+        // les 3 carrés
+        var x = convertCmToPx(3);
+        var y = h + convertCmToPx(1);
+        ctx.beginPath();
+        // 1er carré
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+p, y);
+        ctx.lineTo(x+p, y+l);
+        ctx.lineTo(x, y+l);
+        ctx.lineTo(x, y);
+        //2ieme carré
+        x = x+p;
+        y + y+l;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+h, y);
+        ctx.lineTo(x+h, y+l);
+        ctx.lineTo(x, y+l);
+        //3ieme carré
+        x = x+h;
+        y + y+l;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+p, y);
+        ctx.lineTo(x+p, y+l);
+        ctx.lineTo(x, y+l);
+
         ctx.stroke();
+
+
         //console.log(pythagore);
         /*
 
