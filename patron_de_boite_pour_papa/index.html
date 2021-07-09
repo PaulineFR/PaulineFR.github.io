@@ -56,11 +56,11 @@
     <h6>Reset</h6>
     <button onclick="drawC();" style="width: 50px;height: 20px;">Ø</button>
     <h6></h6>
-    <input id="largeur" type="range" min="20" max="50" value="30" onchange="changeLargeur();" >
+    <input id="largeur" type="range" min="20" max="65" value="30" onchange="changeLargeur();" >
     <h6></h6>
-    <input id="hauteur" type="range" min="20" max="50" value="30" onchange="changeHauteur();">
+    <input id="hauteur" type="range" min="20" max="65" value="30" onchange="changeHauteur();">
     <h6></h6>
-    <input id="profondeur" type="range" min="20" max="50" value="30" onchange="changeProfondeur();">
+    <input id="profondeur" type="range" min="20" max="65" value="30" onchange="changeProfondeur();">
     <h6>Download</h6>
     <a className="download-link" href="" download="monImage.png">⇓ here ⇓</a>
 </body>
@@ -150,12 +150,55 @@
         ctx.beginPath();
         ctx.moveTo(10, 10);
         ctx.lineTo(37+10, 10);
+        ctx.moveTo(10, 10);
+        ctx.lineTo(10, 37+10);
         ctx.stroke();
 
+        //schema boite couleur
+        // le contour
+        ctx.beginPath();
+        var x = canvas.width - 50;
+        var y = canvas.height - 50;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+20, y-10);
+        ctx.lineTo(x+40, y);
+        ctx.lineTo(x+40, y+30);
+        ctx.lineTo(x+20, y+40);
+        ctx.lineTo(x, y+30);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        //la fente en biais
+        ctx.beginPath()
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+20, y+20);
+        ctx.lineTo(x+40, y+10);
+        ctx.stroke();
+        //le trait rose
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.strokeStyle = "#5f0340";
+        ctx.lineTo(x+20, y+10);
+        ctx.stroke();
+        // le trait bleu
+        ctx.beginPath();
+        ctx.moveTo(x+20, y+10);
+        ctx.strokeStyle = "#000fff";;
+        ctx.lineTo(x+40, y);
+        ctx.stroke();
+        //le trait vert
+        ctx.beginPath()
+        ctx.strokeStyle = "#029450";
+        ctx.moveTo(x+20, y+10);
+        ctx.lineTo(x+20, y+40);
+        ctx.stroke();
 
+        ctx.strokeStyle = "#000000";
+
+
+        ctx.beginPath();
         // les 3 carrés
-        var x = Math.round(h/3) + convertCmToPx(1);
-        var y = h + convertCmToPx(1);
+        x = Math.round(h/3) + convertCmToPx(1);
+        y = h + convertCmToPx(1);
         ctx.beginPath();
         // 1er carré
         ctx.moveTo(x, y);
