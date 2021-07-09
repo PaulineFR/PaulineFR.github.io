@@ -78,7 +78,10 @@
         evt.target.href = dataURL;
     });
 
-
+    /* modifie le nom de l'image téléchargée avec les dimention du patron */
+    function renameImage(){
+        document.getElementsByTagName('a')[0].download = "patronL"+document.getElementById('largeur').value+"H"+document.getElementById('hauteur').value+"P"+document.getElementById('profondeur').value+".png";
+    }
 
     /* change la taille de la largeur */
     function changeLargeur() {
@@ -87,6 +90,7 @@
     ctx.lineWidth = largeur.value;
     texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
     drawP();
+    renameImage();
     }
 
     /* change la taille de la hauteur */
@@ -96,6 +100,7 @@
     ctx.lineWidth = hauteur.value;
     texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + "cm)";
     drawP();
+    renameImage();
     }
 
     /* change la taille de la profondeur */
@@ -105,6 +110,7 @@
     ctx.lineWidth = profondeur.value;
     texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + "cm)";
     drawP();
+    renameImage();
     }
 
     /* convertit les cm en pixels */
