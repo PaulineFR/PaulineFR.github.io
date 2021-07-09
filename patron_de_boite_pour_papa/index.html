@@ -146,17 +146,6 @@
         ctx.lineTo(37+10, 10);
         ctx.stroke();
 
-        /*ctx.beginPath();
-        ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
-        ctx.lineTo(convertMmToPx(largeur.value), convertCmToPx(5));
-        //console.log(largeur.value);
-        //console.log(convertMmToPx(largeur.value));
-        ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
-        ctx.lineTo(convertCmToPx(5), convertMmToPx(hauteur.value));
-        ctx.moveTo(convertCmToPx(5), convertCmToPx(5));
-        let pythagore = Math.round(Math.sqrt(Math.pow(profondeur.value,2)/2));
-        ctx.lineTo(convertMmToPx(pythagore), convertMmToPx(pythagore)); // pythagore
-        ctx.stroke();*/
 
         // les 3 carrés
         var x = Math.round(h/3) + convertCmToPx(1);
@@ -227,18 +216,102 @@
 
         ctx.stroke();
 
+        //les langettes de colle
+        let pythagore = convertMmToPx((Math.sqrt(2)/2) * 5); // hypothénuse 5mm, pour un triangle isocèle, https://calculis.net/q/triangle-isocele-pythagore-85
+            //console.log(pythagore);
+        //1ieres
+        //haut
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-Math.round(h/3), y);
+        ctx.lineTo(x-Math.round(h/3)+pythagore, y-pythagore);
+        ctx.lineTo(x-pythagore, y-pythagore);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        //bas
+        y = y+l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-Math.round(h/3), y);
+        ctx.lineTo(x-Math.round(h/3)+pythagore, y+pythagore);
+        ctx.lineTo(x-pythagore, y+pythagore);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        
+        //2iemes
+        //haut
+        x=x+p;
+        y=y-l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+pythagore, y-pythagore);
+        ctx.lineTo(x+h-pythagore, y-pythagore);
+        ctx.lineTo(x+h, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        //bas
+        y=y+l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+pythagore, y+pythagore);
+        ctx.lineTo(x+h-pythagore, y+pythagore);
+        ctx.lineTo(x+h, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
 
-        //console.log(pythagore);
-        /*
+        //3iemes
+        //haut
+        x=x+p+h;
+        y=y-l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+pythagore, y-pythagore);
+        ctx.lineTo(x+Math.round(h/3)*2-pythagore, y-pythagore);
+        ctx.lineTo(x+Math.round(h/3)*2, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        //bas
+        y=y+l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+pythagore, y+pythagore);
+        ctx.lineTo(x+Math.round(h/3)*2-pythagore, y+pythagore);
+        ctx.lineTo(x+Math.round(h/3)*2, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
 
-        pv² = x² + y²
-        x = y
+        //attache de fermeture
+        //bas (droite)
+        x=x+Math.round(h/3)*2
+        y=y-l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertCmToPx(0.5), y);
+        ctx.lineTo(x+convertCmToPx(0.5), y+l);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+        //haut (gauche)
+        x=x-2*p-2*h;//+Math.round(h/3)*2
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-convertCmToPx(0.5), y);
+        ctx.lineTo(x-convertCmToPx(0.5), y+l);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
 
-        pv² = x.x + y.y = x.x + x.x = 2(x²)
-        (pv²)/2 = x²
-        rac((pv²)/2) = x
 
-        */
     }
 
     /* dessine le canevas */
