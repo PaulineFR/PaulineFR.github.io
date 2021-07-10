@@ -241,19 +241,17 @@
         ctx.lineTo(x+p, y+l);
         ctx.lineTo(x, y+l);
 
-        //deux deux face en biais, partie basse (2/3)
+        //deux deux faces sur les cotés
         //celle de droite (en haut)
         ctx.moveTo(x, y);
         ctx.lineTo(x, y-h);
-        ctx.moveTo(x+p, y);
-        ctx.lineTo(x+p, y-Math.round(h/3)*2);
-        ctx.lineTo(x, y-h);
+        ctx.lineTo(x+p, y-h);
+        ctx.lineTo(x+p, y);
         //celle de gauche (en bas)
         ctx.moveTo(x, y+l);
         ctx.lineTo(x, y+l+h);
-        ctx.moveTo(x+p, y+l);
-        ctx.lineTo(x+p, y+l+Math.round(h/3)*2);
-        ctx.lineTo(x, y+l+h);
+        ctx.lineTo(x+p, y+l+h);
+        ctx.lineTo(x+p, y+l);
 
         // face 2/3 - 1/3
         // plus grande partie : 2/3
@@ -363,12 +361,29 @@
 
         //attache de fermeture
         //bas (droite)
+            // premiere partie
         x=x+Math.round(h/3)*2
         y=y-l;
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x+convertCmToPx(0.5), y);
         ctx.lineTo(x+convertCmToPx(0.5), y+l);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+            // effacer la ligne (oui, c'est du bricolage j'ai la flemme d'aller effacer la ligne ou ce trait est dessiné)
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 2;
+            // deuxieme partie
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertCmToPx(1), y);
+        ctx.lineTo(x+convertCmToPx(1), y+l);
         ctx.lineTo(x, y+l);
         ctx.stroke();
         //haut (gauche)
