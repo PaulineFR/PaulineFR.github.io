@@ -72,10 +72,24 @@
     console.log(convertCmToPx(29.7));
     console.log(convertCmToPx(1));
 
+    var dl = false;
+
     /* pour télécharger le dessin */
     document.getElementsByTagName('a')[0].addEventListener("click", function (evt) {
+        dl = true;
+        drawP();
         var dataURL = canevas.toDataURL();
         evt.target.href = dataURL;
+        dl = false;
+        ctx.strokeStyle = "#000000"
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, 793);
+        ctx.lineTo(1122, 793);
+        ctx.lineTo(1122, 0);
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+        drawP();
     });
 
     /* modifie le nom de l'image téléchargée avec les dimention du patron */
@@ -136,7 +150,11 @@
     /* dessine le patron */
     function drawP() {
         ctx.fillStyle = "#ffffff";
-        ctx.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
+        if(dl) {
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else {
+            ctx.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
+        }
         var largeur = document.getElementById('largeur');
         var hauteur = document.getElementById('hauteur');
         var profondeur = document.getElementById('profondeur');
@@ -154,6 +172,7 @@
         ctx.lineTo(10, 37+10);
         ctx.stroke();
 
+        if(!dl) {
         //schema boite couleur
         // le contour
         ctx.beginPath();
@@ -193,6 +212,7 @@
         ctx.stroke();
 
         ctx.strokeStyle = "#000000";
+        }
 
 
         ctx.beginPath();
