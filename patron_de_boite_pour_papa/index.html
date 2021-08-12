@@ -219,7 +219,7 @@
         ctx.beginPath();
         // les 3 carrés
         x = Math.round(h/3) + convertCmToPx(1);
-        y = h + convertCmToPx(1);
+        y = p + convertCmToPx(1);
         ctx.beginPath();
         // 1er carré
         ctx.moveTo(x, y);
@@ -285,8 +285,6 @@
         ctx.stroke();
 
         //les langettes de colle
-        let pythagore = convertMmToPx((Math.sqrt(2)/2) * 5); // hypothénuse 5mm, pour un triangle isocèle, https://calculis.net/q/triangle-isocele-pythagore-85
-            //console.log(pythagore);
         //1ieres
         //haut
         ctx.beginPath();
@@ -314,8 +312,8 @@
         y=y-l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+convertMmToPx(1), y-h/2);
-        ctx.lineTo(x+h-convertMmToPx(1), y-h/2);
+        ctx.lineTo(x+convertMmToPx(1), y-p/2);
+        ctx.lineTo(x+h-convertMmToPx(1), y-p/2);
         ctx.lineTo(x+h, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -325,8 +323,8 @@
         y=y+l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+convertMmToPx(1), y+h/2);
-        ctx.lineTo(x+h-convertMmToPx(1), y+h/2);
+        ctx.lineTo(x+convertMmToPx(1), y+p/2);
+        ctx.lineTo(x+h-convertMmToPx(1), y+p/2);
         ctx.lineTo(x+h, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -339,8 +337,8 @@
         y=y-l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+convertMmToPx(1), y-h/2);
-        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y-h/2);
+        ctx.lineTo(x+convertMmToPx(1), y-p/2);
+        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y-p/2);
         ctx.lineTo(x+Math.round(h/3)*2, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -350,8 +348,8 @@
         y=y+l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+convertMmToPx(1), y+h/2);
-        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y+h/2);
+        ctx.lineTo(x+convertMmToPx(1), y+p/2);
+        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y+p/2);
         ctx.lineTo(x+Math.round(h/3)*2, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
