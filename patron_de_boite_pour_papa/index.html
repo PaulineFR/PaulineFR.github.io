@@ -291,8 +291,7 @@
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x-Math.round(h/3), y);
-        ctx.lineTo(x-Math.round(h/3)+pythagore, y-pythagore);
-        ctx.lineTo(x-pythagore, y-pythagore);
+        ctx.lineTo(x, y-p);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
         ctx.fill();
@@ -302,8 +301,7 @@
         ctx.beginPath();
         ctx.moveTo(x, y);
         ctx.lineTo(x-Math.round(h/3), y);
-        ctx.lineTo(x-Math.round(h/3)+pythagore, y+pythagore);
-        ctx.lineTo(x-pythagore, y+pythagore);
+        ctx.lineTo(x, y+p);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
         ctx.fill();
@@ -315,8 +313,8 @@
         y=y-l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+pythagore, y-pythagore);
-        ctx.lineTo(x+h-pythagore, y-pythagore);
+        ctx.lineTo(x+convertMmToPx(1), y-h/2);
+        ctx.lineTo(x+h-convertMmToPx(1), y-h/2);
         ctx.lineTo(x+h, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -326,8 +324,8 @@
         y=y+l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+pythagore, y+pythagore);
-        ctx.lineTo(x+h-pythagore, y+pythagore);
+        ctx.lineTo(x+convertMmToPx(1), y+h/2);
+        ctx.lineTo(x+h-convertMmToPx(1), y+h/2);
         ctx.lineTo(x+h, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -340,8 +338,8 @@
         y=y-l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+pythagore, y-pythagore);
-        ctx.lineTo(x+Math.round(h/3)*2-pythagore, y-pythagore);
+        ctx.lineTo(x+convertMmToPx(1), y-h/2);
+        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y-h/2);
         ctx.lineTo(x+Math.round(h/3)*2, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -351,8 +349,8 @@
         y=y+l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+pythagore, y+pythagore);
-        ctx.lineTo(x+Math.round(h/3)*2-pythagore, y+pythagore);
+        ctx.lineTo(x+convertMmToPx(1), y+h/2);
+        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y+h/2);
         ctx.lineTo(x+Math.round(h/3)*2, y);
         ctx.lineTo(x, y);
         ctx.fillStyle = "#b5b6b6";
@@ -429,8 +427,9 @@
 
         drawP();
         /*
-        (0,y) |
-        (x,0) -
+        moveto(0,0)
+        lineto(0,y) : |
+        lineto(x,0) : -
         */
     }
 </script>
