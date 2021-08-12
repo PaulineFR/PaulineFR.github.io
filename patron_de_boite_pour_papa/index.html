@@ -219,7 +219,11 @@
         ctx.beginPath();
         // les 3 carrés
         x = Math.round(h/3) + convertCmToPx(1);
-        y = p + convertCmToPx(1);
+        if (p>h){
+            y = p + convertCmToPx(1);
+        } else {
+            y = h + convertCmToPx(1);
+        }
         ctx.beginPath();
         // 1er carré
         ctx.moveTo(x, y);
