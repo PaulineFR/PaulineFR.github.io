@@ -55,7 +55,7 @@ function generate(){
   const U_NOWEEEK  = !TEMPLATE; // no semaine affichés
   const U_WEEKDAY  = !TEMPLATE; // jour semaine affiché
   const U_PAST     = !TEMPLATE && document.getElementById("past").checked; // past blacked out
-  const U_VERTICAL = false; // vertical
+  const U_VERTICAL = document.getElementById("vertical").checked; // vertical
 
 
   // Namespace pour SVG
@@ -68,10 +68,17 @@ function generate(){
   const header = 10;
   const title = 20;
   const trait = 1;
-  const svgWidth = cellSize * 31 + spacing * 31 + trait * 31 + margin * 2 + header; // largeur totale
-  const svgHeight = (!TEMPLATE ? title : 0) + cellSize * 12 + spacing * 12 + trait * 12 + margin * 2 + header; // hauteur totale
+  const days_axis_size = cellSize * 31 + spacing * 31 + trait * 31 + margin * 2 + header;
+  const month_axis_size = cellSize * 12 + spacing * 12 + trait * 12 + margin * 2 + header;
+  const svgWidth = U_VERTICAL ? month_axis_size : days_axis_size;  // largeur totale
+  const svgHeight = (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis_size : month_axis_size); // hauteur totale
   const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-  const daysInMonths = [31, isLeapYear(year) || TEMPLATE ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];          // TODO : année bissextile
+  const daysInMonths = [31, isLeapYear(year) || TEMPLATE ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const verticalHeaderTextSize = "11";
+  const horizontalHeaderTextSize = "9";
+  const monthTextSize = U_VERTICAL ? horizontalHeaderTextSize : verticalHeaderTextSize;
+  const daysTextSize = U_VERTICAL ? verticalHeaderTextSize : horizontalHeaderTextSize;
+
 
   // Crée le conteneur SVG
   const svg = document.createElementNS(svgNS, "svg");
@@ -103,8 +110,10 @@ function generate(){
   for (let month = 0; month < months.length; month++) {
     // Ajouter le label du mois
     const text = document.createElementNS(svgNS, "text");
-    text.setAttribute("x", margin + 0);
-    text.setAttribute("y", (!TEMPLATE ? title : 0) + header + margin + (month + 1) * (cellSize + spacing) + trait);
+    const days_axis = header/2 + margin + 0;
+    const month_axis = header + margin + (month + 1) * (cellSize + spacing) + trait;
+    text.setAttribute("x", (U_VERTICAL ? month_axis - cellSize / 2 : days_axis));
+    text.setAttribute("y", (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis + header/2 : month_axis) );
     text.setAttribute("font-size", "11");
     text.setAttribute("font-family", "Arial");
     text.setAttribute("dominant-baseline", "middle");
@@ -122,14 +131,18 @@ function generate(){
 
         const square = document.createElementNS(svgNS, "rect");
 
-        const x = header + margin + day * (cellSize + spacing); // Position horizontale
-        const y = (!TEMPLATE ? title : 0) + header + margin + (month + 1) * (cellSize + spacing); // Position verticale
+        const days_axis = header + margin + day * (cellSize + spacing)- trait / 2;
+        const month_axis = header + margin + (month + 1) * (cellSize + spacing) - cellSize / 2 - trait / 2;
+        const x = (U_VERTICAL ? month_axis : days_axis); // Position horizontale
+        const y = (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis : month_axis); // Position verticale
+        const w = (U_VERTICAL ? 0 : (day == days ? -(cellSize / 2) : spacing))
+        const h = (U_VERTICAL ? (day == days ? -(cellSize / 2) : spacing) : 0)
 
         // Définir la position et la taille des cercles
-        square.setAttribute("width", cellSize + (day == days ? -(cellSize / 2) : spacing) + trait);
-        square.setAttribute("height", cellSize + trait);
-        square.setAttribute("x", x - trait / 2);
-        square.setAttribute("y", y - cellSize / 2 - trait / 2);
+        square.setAttribute("width", cellSize + w + trait);
+        square.setAttribute("height", cellSize + h + trait);
+        square.setAttribute("x", x );
+        square.setAttribute("y", y );
         square.setAttribute("fill", "black"); 
 
         if (!isSunday(circle_date.getDay())) {
@@ -139,8 +152,8 @@ function generate(){
         if(day == 1 && !isMonday(circle_date.getDay())){
           const square2 = square.cloneNode(true)
           //square2.x -= cellSize;
-          square2.setAttribute("x", x - trait / 2 - cellSize/2);
-          square2.setAttribute("width", cellSize / 2  + trait);
+          square2.setAttribute((U_VERTICAL ? "y" : "x"), (U_VERTICAL ? y : x) - trait / 2 - cellSize/2);
+          square2.setAttribute((U_VERTICAL ? "height" : "width") , cellSize / 2  + trait);
           svg.appendChild(square2);
         }
       }
@@ -153,9 +166,12 @@ function generate(){
       if(!header_ok){
         // Ajouter le label du jour
         const text = document.createElementNS(svgNS, "text");
-        text.setAttribute("x", header + margin + day * (cellSize + spacing) - cellSize/2 + (day <10 ? 2.5 : 0));
-        text.setAttribute("y", (!TEMPLATE ? title : 0) + header/2 + margin + 0);
-        text.setAttribute("font-size", "9");
+        
+        const days_axis = header + margin + day * (cellSize + spacing) - cellSize/2 + trait ;
+        const month_axis = header/2 + margin + 0;
+        text.setAttribute("x", (U_VERTICAL ? month_axis : days_axis + (day <10 ? 1.5 : 0)));
+        text.setAttribute("y", (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis : month_axis));
+        text.setAttribute("font-size", daysTextSize);
         text.setAttribute("font-family", "Arial");
         text.setAttribute("dominant-baseline", "hanging");
         text.setAttribute("fill", "black");
@@ -167,8 +183,10 @@ function generate(){
 
       const circle = document.createElementNS(svgNS, "circle");
 
-      const x = header + margin + day * (cellSize + spacing); // Position horizontale
-      const y = (!TEMPLATE ? title : 0) + header + margin + (month + 1) * (cellSize + spacing); // Position verticale
+      const days_axis = header + margin + day * (cellSize + spacing);
+      const month_axis = header + margin + (month + 1) * (cellSize + spacing);
+      const x = (U_VERTICAL ? month_axis : days_axis); // Position horizontale
+      const y = (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis : month_axis); // Position verticale
 
       // Définir la position et la taille des cercles
       circle.setAttribute("cx", x);
