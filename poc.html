@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dot Calendar</title>
+</head>
+<body>
+  <input id="year" type="number" min="1900" max="3000" value="2025" />
+  <button type="button" onclick="generate()">Générer</button>
+  <p id="test"></p>
+  <div id="svg-container"></div>
+ 
+
+
+  <script>
+
+    
+    /*******************************************************************************************************
+     * Procedure    : daysInYear
+     * Author       : PFR
+     * Date         : 07/10/2024
+     * Last modifed : --
+     * Purpose      : gets how many days is there in parameter year (whether it is a leap year)
+     * Parameters   : {int:year} the year to know the number of days of
+     * Return       : {int} the number of days of the year
+    /*******************************************************************************************************
+    /*/
+    function daysInYear(year)
+    {
+    return new Date(year,1,29).getMonth()==1 ? 366 : 365;
+    }
+
+    function isLeapYear(year){
+        return daysInYear(year) == 366
+    }
+
+    function isWeekend(day) {
+        return (day === 6) || (day  === 0); // 6 = Saturday, 0 = Sunday
+    }
+
+    function isSunday(day) {
+        return (day  === 0); // 6 = Saturday, 0 = Sunday
+    }
+
+
+    const FUCK_JAVASCRIPT = -1;
+
+    function generate(){
+    
+    document.getElementById("test").innerHTML = "start";
+
+    // user input
+    let year = Number(document.getElementById("year").value);
+    
+
+    // Namespace pour SVG
+    const svgNS = "http://www.w3.org/2000/svg";
+
+    // Dimensions du SVG
+    const svgWidth = 700; // largeur totale
+    const svgHeight = 400; // hauteur totale
+    const cellSize = 10; // taille des cercles
+    const spacing = 5; // espacement entre les cercles
+    const margin = 10;
+    const trait = 1;
+    const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+    const daysInMonths = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];          // TODO : année bissextile
+
+    // Crée le conteneur SVG
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("width", svgWidth);
+    svg.setAttribute("height", svgHeight);
+    svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+    svg.style.border = "1px solid black"; // Pour visualiser la bordure du SVG
+
+    // Génère les mois et jours
+    for (let month = 0; month < months.length; month++) {
+      // Ajouter le label du mois
+      const text = document.createElementNS(svgNS, "text");
+      text.setAttribute("x", margin + 0);
+      text.setAttribute("y", margin + (month + 1) * (cellSize + spacing));
+      text.setAttribute("font-size", "14");
+      text.setAttribute("dominant-baseline", "middle");
+      text.setAttribute("fill", "black");
+      text.textContent = months[month];
+      svg.appendChild(text);
+
+      
+      const days = daysInMonths[month];
+      // Générer les carrés
+      for (let day = 1; day <= days; day++) {
+
+        const circle_date = new Date(year, month, day);
+
+        if (!isSunday(circle_date.getDay())) {
+            const square = document.createElementNS(svgNS, "rect");
+
+            const x = margin + day * (cellSize + spacing); // Position horizontale
+            const y = margin + (month + 1) * (cellSize + spacing); // Position verticale
+
+            // Définir la position et la taille des cercles
+            square.setAttribute("width", cellSize + (day == days ? -(cellSize / 2) : spacing) + trait);
+            square.setAttribute("height", cellSize + trait);
+            square.setAttribute("x", x - trait / 2);
+            square.setAttribute("y", y - cellSize / 2 - trait / 2);
+
+            square.setAttribute("fill", "black"); 
+            svg.appendChild(square);
+        }
+    }
+
+      // Générer les cercles pour chaque jour du mois
+      for (let day = 1; day <= days; day++) {
+
+        const circle_date = new Date(year, month, day);
+
+        const circle = document.createElementNS(svgNS, "circle");
+
+        const x = margin + day * (cellSize + spacing); // Position horizontale
+        const y = margin + (month + 1) * (cellSize + spacing); // Position verticale
+
+        // Définir la position et la taille des cercles
+        circle.setAttribute("cx", x);
+        circle.setAttribute("cy", y);
+        circle.setAttribute("r", cellSize / 2);
+
+        // Couleur des cercles
+      if (isWeekend(circle_date.getDay())) {
+          circle.setAttribute("fill", "lightgray"); // Weekend
+          circle.setAttribute("stroke", "lightgray");
+        } else {
+          circle.setAttribute("fill", "white"); 
+          circle.setAttribute("stroke-width", trait);
+          circle.setAttribute("stroke", "black");
+        }
+
+        svg.appendChild(circle);
+      }
+    }
+
+    // Ajouter le SVG au conteneur
+    document.getElementById("svg-container").appendChild(svg);
+    }
+  </script>
+</body>
+</html>
