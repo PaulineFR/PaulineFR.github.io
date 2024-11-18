@@ -164,6 +164,10 @@ function generate(){
     if (U_WEEKENDS && isWeekend(circle_date.getDay())) {
       circle.setAttribute("fill", "lightgray");
     }
+    if (TEMPLATE && day == 29 && month == 2 + FUCK_JAVASCRIPT) {
+      circle.setAttribute("stroke-dasharray", "1,1")
+    };
+
 
     svg.appendChild(circle);
   }
