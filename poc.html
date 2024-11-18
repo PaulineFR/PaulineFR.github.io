@@ -23,6 +23,13 @@
   </label>
   <br/>
 
+  <label for="weekday">Jour de la semaine affiché</label>
+  <label class="switch" >
+    <input type="checkbox" id="weekday" onchange="generate()">
+    <span class="slider round"></span>
+  </label>
+  <br/>
+
   <label for="past">Past blacked out</label>
   <label class="switch" >
     <input type="checkbox" id="past" onchange="generate()" checked>
@@ -40,8 +47,6 @@
   <!-- 
    
   - no semaine affichés
-  - jour semaine affiché
-  - vertical
   - export svg
   - export png
   - print multiple pdf

@@ -34,6 +34,25 @@ function isMonday(day) {
    return (day  === 1);
 }
 
+function getDayLetter(day) {
+   switch (day){
+    case 1:
+      return "L";
+    case 2:
+      return "M";
+    case 3:
+      return "M";
+    case 4:
+      return "J";
+    case 5:
+      return "V";
+    case 6:
+      return "S";
+    case 0:
+      return "D";
+  }
+}
+
 
 const FUCK_JAVASCRIPT = -1;
 generate();
@@ -53,7 +72,7 @@ function generate(){
   const U_WEEKENDS = !TEMPLATE && document.getElementById("weekend").checked; // weekend affichés
   const U_WEEKS    = !TEMPLATE && document.getElementById("week").checked; // semaines affcihés
   const U_NOWEEEK  = !TEMPLATE; // no semaine affichés
-  const U_WEEKDAY  = !TEMPLATE; // jour semaine affiché
+  const U_WEEKDAY  = !TEMPLATE && document.getElementById("weekday").checked; // jour semaine affiché
   const U_PAST     = !TEMPLATE && document.getElementById("past").checked; // past blacked out
   const U_VERTICAL = document.getElementById("vertical").checked; // vertical
 
@@ -181,6 +200,8 @@ function generate(){
 
       const circle_date = new Date(year, month, day);
 
+      
+
       const circle = document.createElementNS(svgNS, "circle");
 
       const days_axis = header + margin + day * (cellSize + spacing);
@@ -210,8 +231,24 @@ function generate(){
         circle.setAttribute("fill", "black");
       }
 
-
       svg.appendChild(circle);
+
+
+      if(U_WEEKDAY){
+        // Ajouter le label du jour
+        const text = document.createElementNS(svgNS, "text");
+        
+        const days_axis = header + margin + day * (cellSize + spacing) - cellSize/4 ;
+        const month_axis = header + margin + (month + 1) * (cellSize + spacing) - cellSize/4;
+        text.setAttribute("x", (U_VERTICAL ? month_axis : days_axis) + (getDayLetter(circle_date.getDay()) == "M" ? 0 : 0.5));
+        text.setAttribute("y", (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis : month_axis));
+        text.setAttribute("font-size", "6");
+        text.setAttribute("font-family", "Arial");
+        text.setAttribute("dominant-baseline", "hanging");
+        text.setAttribute("fill", "black");
+        text.textContent = getDayLetter(circle_date.getDay());
+        svg.appendChild(text);
+      }
     }
   }
 
