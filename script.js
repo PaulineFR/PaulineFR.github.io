@@ -132,7 +132,6 @@ function generate(){
   const horizontalHeaderTextSize = "9";
   const monthTextSize = U_VERTICAL ? horizontalHeaderTextSize : verticalHeaderTextSize;
   const daysTextSize = U_VERTICAL ? verticalHeaderTextSize : horizontalHeaderTextSize;
-  document.getElementById("test").innerHTML = "w" + svgWidth + " x h" +svgHeight
 
   // Crée le conteneur SVG
   const svg = document.createElementNS(svgNS, "svg");
@@ -338,12 +337,6 @@ function downloadSVG() {
 
   URL.revokeObjectURL(url); // Libère l'URL après téléchargement
 
-  /*var link = document.createElement("a");
-  link.download = name;
-  link.href = uri;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);*/
 }
 
 /// source : https://www.beaubus.com/blog/how_to_save_inline_svg_as_png_with_vanilla_javascript_and_html_canvas.html
@@ -386,13 +379,7 @@ function downloadPNG()
 
     let image = new Image(); // create <img> element
     image.onload = function () {
-        // define fill (specify 'no-repeat' if you don't want it to repeat
-        //context.fillStyle = context.createPattern(image, 'no-repeat'); 
-
-    context.drawImage(image, 0, 0, png_width, png_height); // Échelle appliquée
-
-        // fill rectangle with defined fill
-       // context.fillRect(0, 0, canvas.width, canvas.height); 
+        context.drawImage(image, 0, 0, png_width, png_height); 
         download(canvas.toDataURL("image/png"), `dot calendar ${TEMPLATE ? "template" : year}.png`);
     }.bind(this);
 
@@ -403,24 +390,11 @@ function downloadPNG()
 
 function download(href, name)
 {
-  
   const link = document.createElement("a");
   link.href = href;
   link.download = name ;
   link.click();
-
   delete link;
-  
-  /*
-    var a = document.createElement('a');
-
-    a.download = name;
-    a.href = href;
-
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    */
 }
 
 
