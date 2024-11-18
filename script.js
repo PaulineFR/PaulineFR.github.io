@@ -50,11 +50,11 @@ function generate(){
   // user input
   let year = Number(document.getElementById("year").value);
   const TEMPLATE   = year == 0;
-  const U_WEEKENDS = !TEMPLATE; // weekend affichés
-  const U_WEEKS    = !TEMPLATE; // semaines affcihés
+  const U_WEEKENDS = !TEMPLATE && document.getElementById("weekend").checked; // weekend affichés
+  const U_WEEKS    = !TEMPLATE && document.getElementById("week").checked; // semaines affcihés
   const U_NOWEEEK  = !TEMPLATE; // no semaine affichés
   const U_WEEKDAY  = !TEMPLATE; // jour semaine affiché
-  const U_PAST     = !TEMPLATE; // past blacked out
+  const U_PAST     = !TEMPLATE && document.getElementById("past").checked; // past blacked out
   const U_VERTICAL = false; // vertical
 
 

@@ -2,9 +2,34 @@
 <html>
 <head>
   <title>Dot Calendar</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <label for="year">Année</label>
   <input id="year" type="number" min="1900" max="3000" value="2025" />
+  <br/>
+
+  <label for="weekend">Weekends affichés</label>
+  <label class="switch" >
+    <input type="checkbox" id="weekend">
+    <span class="slider round"></span>
+  </label>
+  <br/>
+
+  <label for="week">Semaines affichées</label>
+  <label class="switch" >
+    <input type="checkbox" id="week">
+    <span class="slider round"></span>
+  </label>
+  <br/>
+
+  <label for="past">Past blacked out</label>
+  <label class="switch" >
+    <input type="checkbox" id="past">
+    <span class="slider round"></span>
+  </label>
+  <br/>
+
   <!-- 
    
   - weekend affichés
@@ -21,6 +46,8 @@
   - suppr généré, regénéré on change
 
   -->
+  <br/>
+
   <button type="button" onclick="generate()">Générer</button>
   <p id="test"></p>
   <div id="svg-container"></div>
