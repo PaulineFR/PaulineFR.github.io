@@ -6,49 +6,42 @@
 </head>
 <body>
   <label for="year">Année</label>
-  <input id="year" type="number" min="1900" max="3000" value="2025" />
+  <input id="year" type="number" min="1900" max="3000" value="2025" onchange="generate()" />
   <br/>
 
   <label for="weekend">Weekends affichés</label>
   <label class="switch" >
-    <input type="checkbox" id="weekend">
+    <input type="checkbox" id="weekend" onchange="generate()">
     <span class="slider round"></span>
   </label>
   <br/>
 
   <label for="week">Semaines affichées</label>
   <label class="switch" >
-    <input type="checkbox" id="week">
+    <input type="checkbox" id="week" onchange="generate()">
     <span class="slider round"></span>
   </label>
   <br/>
 
   <label for="past">Past blacked out</label>
   <label class="switch" >
-    <input type="checkbox" id="past">
+    <input type="checkbox" id="past" onchange="generate()">
     <span class="slider round"></span>
   </label>
   <br/>
 
   <!-- 
    
-  - weekend affichés
-  - semaines affcihés
   - no semaine affichés
   - jour semaine affiché
-  - past blacked out
   - vertical
   - export svg
   - export png
   - print multiple pdf
 
-  - année vide
-  - suppr généré, regénéré on change
-
   -->
   <br/>
 
-  <button type="button" onclick="generate()">Générer</button>
   <p id="test"></p>
   <div id="svg-container"></div>
  
