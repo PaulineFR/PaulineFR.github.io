@@ -132,7 +132,7 @@ function generate(){
   const horizontalHeaderTextSize = "9";
   const monthTextSize = U_VERTICAL ? horizontalHeaderTextSize : verticalHeaderTextSize;
   const daysTextSize = U_VERTICAL ? verticalHeaderTextSize : horizontalHeaderTextSize;
-
+  document.getElementById("test").innerHTML = "w" + svgWidth + " x h" +svgHeight
 
   // Crée le conteneur SVG
   const svg = document.createElementNS(svgNS, "svg");
@@ -326,7 +326,7 @@ function toggleCircleTextLetter(){
 
 
 
-function download() {
+function downloadSVG() {
   const svgString = document.getElementById("svg-container").innerHTML;
   let year = Number(document.getElementById("year").value);
   const TEMPLATE   = year == 0;
@@ -334,15 +334,9 @@ function download() {
   const blob = new Blob([svgString], { type: "image/svg+xml" });
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement("a");
-  link.href = url;
-  link.download =  `dot calendar ${TEMPLATE ? "template" : year}.svg` ;
-  link.click();
+  download(url, `dot calendar ${TEMPLATE ? "template" : year}.svg`);
 
-  delete link;
   URL.revokeObjectURL(url); // Libère l'URL après téléchargement
-
-
 
   /*var link = document.createElement("a");
   link.download = name;
@@ -350,6 +344,83 @@ function download() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);*/
+}
+
+/// source : https://www.beaubus.com/blog/how_to_save_inline_svg_as_png_with_vanilla_javascript_and_html_canvas.html
+function downloadPNG()
+{
+  let year = Number(document.getElementById("year").value);
+  const U_VERTICAL = document.getElementById("vertical").checked; // vertical
+  const TEMPLATE   = year == 0;
+    // specify png with and height in pixels
+
+    //// DIMENTIONS
+    /// avec titre
+    // w526 x h242 - horizontal
+    // w222 x h546 - vertical
+    // w526 x h222 - horizontal
+    // w222 x h526 - horizontal
+
+    const t = 20;
+    const x = 222;
+    const y = 526;
+    const p = 3;
+
+
+    var png_width = (U_VERTICAL ? x : y) * p;
+    var png_height = (U_VERTICAL ? y : x + (!TEMPLATE ? t : 0)) * p;
+
+    const svgString = document.getElementById("svg-container").innerHTML;
+    var inline_svg = svgString; // code of inline SVG
+
+    var canvas = document.createElement("canvas"); // create <canvas> element
+    // The 2D Context provides objects, methods, and properties to draw 
+    // and manipulate graphics on a canvas drawing surface.
+    var context = canvas.getContext("2d");
+
+    // set canvas with and height equal to png with and height
+    canvas.width = png_width;
+    canvas.height = png_height;
+    context.fillStyle = "white";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    let image = new Image(); // create <img> element
+    image.onload = function () {
+        // define fill (specify 'no-repeat' if you don't want it to repeat
+        //context.fillStyle = context.createPattern(image, 'no-repeat'); 
+
+    context.drawImage(image, 0, 0, png_width, png_height); // Échelle appliquée
+
+        // fill rectangle with defined fill
+       // context.fillRect(0, 0, canvas.width, canvas.height); 
+        download(canvas.toDataURL("image/png"), `dot calendar ${TEMPLATE ? "template" : year}.png`);
+    }.bind(this);
+
+    // btoa — binary string to ASCII (Base64-encoded)
+    image.src = 'data:image/svg+xml;base64,' + btoa(inline_svg); 
+}
+
+
+function download(href, name)
+{
+  
+  const link = document.createElement("a");
+  link.href = href;
+  link.download = name ;
+  link.click();
+
+  delete link;
+  
+  /*
+    var a = document.createElement('a');
+
+    a.download = name;
+    a.href = href;
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    */
 }
 
 
