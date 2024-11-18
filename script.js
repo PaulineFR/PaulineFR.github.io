@@ -183,9 +183,14 @@ function generate(){
       if (U_WEEKENDS && isWeekend(circle_date.getDay())) {
         circle.setAttribute("fill", "lightgray");
       }
+      // 29 février
       if (TEMPLATE && day == 29 && month == 2 + FUCK_JAVASCRIPT) {
         circle.setAttribute("stroke-dasharray", "1,1")
       };
+      // past blaked out
+      if (U_PAST && circle_date < Date.now()) {
+        circle.setAttribute("fill", "black");
+      }
 
 
       svg.appendChild(circle);
