@@ -25,7 +25,14 @@
 
   <label for="weekday">Jour de la semaine affiché</label>
   <label class="switch" >
-    <input type="checkbox" id="weekday" onchange="generate()">
+    <input type="checkbox" id="weekday" onchange="toggleCircleTextNo()">
+    <span class="slider round"></span>
+  </label>
+  <br/>
+
+  <label for="weekno">Numéro de la semaine affiché</label>
+  <label class="switch" >
+    <input type="checkbox" id="weekno" onchange="toggleCircleTextLetter()">
     <span class="slider round"></span>
   </label>
   <br/>
@@ -46,7 +53,6 @@
 
   <!-- 
    
-  - no semaine affichés
   - export svg
   - export png
   - print multiple pdf
