@@ -101,8 +101,6 @@ generate();
 
 function generate(){
 
-  document.getElementById("test").innerHTML = "start";
-
   // user input
   let year = Number(document.getElementById("year").value);
   const TEMPLATE   = year == 0;
@@ -141,10 +139,11 @@ function generate(){
   svg.setAttribute("width", svgWidth);
   svg.setAttribute("height", svgHeight);
   svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+  svg.setAttribute("xmlns", `${svgNS}`);
   svg.style.border = "1px solid black"; // Pour visualiser la bordure du SVG
 
 
-
+  
   ///////////////////////////////////////////////
 
 
@@ -322,6 +321,35 @@ function toggleCircleTextLetter(){
   document.getElementById("weekday").checked = false; // jour semaine non affiché
   generate();
   
+}
+
+
+
+
+function download() {
+  const svgString = document.getElementById("svg-container").innerHTML;
+  let year = Number(document.getElementById("year").value);
+  const TEMPLATE   = year == 0;
+
+  const blob = new Blob([svgString], { type: "image/svg+xml" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download =  `dot calendar ${TEMPLATE ? "template" : year}.svg` ;
+  link.click();
+
+  delete link;
+  URL.revokeObjectURL(url); // Libère l'URL après téléchargement
+
+
+
+  /*var link = document.createElement("a");
+  link.download = name;
+  link.href = uri;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);*/
 }
 
 
