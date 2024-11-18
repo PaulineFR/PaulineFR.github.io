@@ -167,10 +167,10 @@ function generate(){
         // Ajouter le label du jour
         const text = document.createElementNS(svgNS, "text");
         
-        const days_axis = header + margin + day * (cellSize + spacing) - cellSize/2 + trait ;
+        const days_axis = header + margin + day * (cellSize + spacing) - cellSize/2 + trait/2 ;
         const month_axis = header/2 + margin + 0;
         text.setAttribute("x", (U_VERTICAL ? month_axis : days_axis + (day <10 ? 1.5 : 0)));
-        text.setAttribute("y", (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis : month_axis));
+        text.setAttribute("y", (!TEMPLATE ? title : 0) + (U_VERTICAL ? days_axis+ trait/2 : month_axis));
         text.setAttribute("font-size", daysTextSize);
         text.setAttribute("font-family", "Arial");
         text.setAttribute("dominant-baseline", "hanging");
