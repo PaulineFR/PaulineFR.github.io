@@ -49,6 +49,14 @@ function generate(){
 
   // user input
   let year = Number(document.getElementById("year").value);
+  const TEMPLATE   = year == 0;
+  const U_WEEKENDS = !TEMPLATE; // weekend affichés
+  const U_WEEKS    = !TEMPLATE; // semaines affcihés
+  const U_NOWEEEK  = !TEMPLATE; // no semaine affichés
+  const U_WEEKDAY  = !TEMPLATE; // jour semaine affiché
+  const U_PAST     = !TEMPLATE; // past blacked out
+  const U_VERTICAL = false; // vertical
+  document.getElementById("test").innerHTML = year;
 
 
   // Namespace pour SVG
@@ -63,7 +71,7 @@ function generate(){
   const svgWidth = cellSize * 31 + spacing * 31 + trait * 31 + margin * 2 + header; // largeur totale
   const svgHeight = cellSize * 12 + spacing * 12 + trait * 12 + margin * 2 + header; // hauteur totale
   const months = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-  const daysInMonths = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];          // TODO : année bissextile
+  const daysInMonths = [31, isLeapYear(year) || TEMPLATE ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];          // TODO : année bissextile
 
   // Crée le conteneur SVG
   const svg = document.createElementNS(svgNS, "svg");
@@ -88,32 +96,34 @@ function generate(){
   
   const days = daysInMonths[month];
   // Générer les carrés
-  for (let day = 1; day <= days; day++) {
+  if(U_WEEKS){
+    for (let day = 1; day <= days; day++) {
 
-    const circle_date = new Date(year, month, day);
+      const circle_date = new Date(year, month, day);
 
-    const square = document.createElementNS(svgNS, "rect");
+      const square = document.createElementNS(svgNS, "rect");
 
-    const x = header + margin + day * (cellSize + spacing); // Position horizontale
-    const y = header + margin + (month + 1) * (cellSize + spacing); // Position verticale
+      const x = header + margin + day * (cellSize + spacing); // Position horizontale
+      const y = header + margin + (month + 1) * (cellSize + spacing); // Position verticale
 
-    // Définir la position et la taille des cercles
-    square.setAttribute("width", cellSize + (day == days ? -(cellSize / 2) : spacing) + trait);
-    square.setAttribute("height", cellSize + trait);
-    square.setAttribute("x", x - trait / 2);
-    square.setAttribute("y", y - cellSize / 2 - trait / 2);
-    square.setAttribute("fill", "black"); 
+      // Définir la position et la taille des cercles
+      square.setAttribute("width", cellSize + (day == days ? -(cellSize / 2) : spacing) + trait);
+      square.setAttribute("height", cellSize + trait);
+      square.setAttribute("x", x - trait / 2);
+      square.setAttribute("y", y - cellSize / 2 - trait / 2);
+      square.setAttribute("fill", "black"); 
 
-    if (!isSunday(circle_date.getDay())) {
-        svg.appendChild(square);
-    }
+      if (!isSunday(circle_date.getDay())) {
+          svg.appendChild(square);
+      }
 
-    if(day == 1 && !isMonday(circle_date.getDay())){
-      const square2 = square.cloneNode(true)
-      //square2.x -= cellSize;
-      square2.setAttribute("x", x - trait / 2 - cellSize/2);
-      square2.setAttribute("width", cellSize / 2  + trait);
-      svg.appendChild(square2);
+      if(day == 1 && !isMonday(circle_date.getDay())){
+        const square2 = square.cloneNode(true)
+        //square2.x -= cellSize;
+        square2.setAttribute("x", x - trait / 2 - cellSize/2);
+        square2.setAttribute("width", cellSize / 2  + trait);
+        svg.appendChild(square2);
+      }
     }
   }
 
@@ -147,13 +157,12 @@ function generate(){
     circle.setAttribute("r", cellSize / 2);
 
     // Couleur des cercles
-  if (isWeekend(circle_date.getDay())) {
-      circle.setAttribute("fill", "lightgray"); // Weekend
-      circle.setAttribute("stroke", "black");
-    } else {
-      circle.setAttribute("fill", "white"); 
-      circle.setAttribute("stroke-width", trait);
-      circle.setAttribute("stroke", "black");
+    circle.setAttribute("fill", "white"); 
+    circle.setAttribute("stroke-width", trait);
+    circle.setAttribute("stroke", "black");
+    // Weekend
+    if (U_WEEKENDS && isWeekend(circle_date.getDay())) {
+      circle.setAttribute("fill", "lightgray");
     }
 
     svg.appendChild(circle);
@@ -161,5 +170,6 @@ function generate(){
   }
 
   // Ajouter le SVG au conteneur
+  document.getElementById("svg-container").innerHTML = "";
   document.getElementById("svg-container").appendChild(svg);
 }
