@@ -1,0 +1,440 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./icon.PNG">
+    <title>Patron de boite pour les jeux de papa</title>
+    <style>
+
+    input[type='range'] {
+      overflow: hidden;
+      width: 80px;
+      -webkit-appearance: none;
+    }
+    
+    input[type='range']::-webkit-slider-thumb {
+      width: 10px;
+      -webkit-appearance: none;
+      height: 10px;
+      cursor: pointer;
+    border-radius: 15px;
+    }
+
+    #largeur {
+      background-color: #8cfcfc;
+    }
+
+    #largeur::-webkit-slider-thumb {
+      background: #000fff;
+      box-shadow: -80px 0 0 80px #00ffff;
+    }
+
+    #hauteur {
+      background-color: #90fdca;
+    }
+
+    #hauteur::-webkit-slider-thumb {
+      background: #029450;
+      box-shadow: -80px 0 0 80px #00ff88;
+    }
+
+    #profondeur {
+      background-color: #fd92da;
+    }
+
+    #profondeur::-webkit-slider-thumb {
+      background: #5f0340;
+      box-shadow: -80px 0 0 80px #ff00aa;
+    }
+
+    </style>
+</head>
+
+<body onload="drawC();">
+    <canvas id="canvas" width="1122" height="793"></canvas>
+    <h1>Patron de boite pour les jeux de papa</h1>
+    <h6>Reset</h6>
+    <button onclick="drawC();" style="width: 50px;height: 20px;">Ø</button>
+    <h6></h6>
+    <input id="largeur" type="range" min="20" max="65" value="30" onchange="changeLargeur();" >
+    <h6></h6>
+    <input id="hauteur" type="range" min="20" max="65" value="30" onchange="changeHauteur();">
+    <h6></h6>
+    <input id="profondeur" type="range" min="20" max="65" value="30" onchange="changeProfondeur();">
+    <h6>Download</h6>
+    <a className="download-link" href="" download="monImage.png">⇓ here ⇓</a>
+</body>
+
+<script>
+    var canevas = document.getElementById('canvas');
+    var ctx = canevas.getContext('2d');
+    console.log(convertCmToPx(21));
+    console.log(convertCmToPx(29.7));
+    console.log(convertCmToPx(1));
+
+    var dl = false;
+
+    /* pour télécharger le dessin */
+    document.getElementsByTagName('a')[0].addEventListener("click", function (evt) {
+        dl = true;
+        drawP();
+        var dataURL = canevas.toDataURL();
+        evt.target.href = dataURL;
+        dl = false;
+        ctx.strokeStyle = "#000000"
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, 793);
+        ctx.lineTo(1122, 793);
+        ctx.lineTo(1122, 0);
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+        drawP();
+    });
+
+    /* modifie le nom de l'image téléchargée avec les dimention du patron */
+    function renameImage(){
+        document.getElementsByTagName('a')[0].download = "patronL"+document.getElementById('largeur').value+"H"+document.getElementById('hauteur').value+"P"+document.getElementById('profondeur').value+".png";
+    }
+
+    /* change la taille de la largeur */
+    function changeLargeur() {
+    var texte = document.getElementsByTagName('h6')[1];
+    var largeur = document.getElementById('largeur');
+    ctx.lineWidth = largeur.value;
+    texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
+    drawP();
+    renameImage();
+    }
+
+    /* change la taille de la hauteur */
+    function changeHauteur() {
+    var texte = document.getElementsByTagName('h6')[2];
+    var hauteur = document.getElementById('hauteur');
+    ctx.lineWidth = hauteur.value;
+    texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + "cm)";
+    drawP();
+    renameImage();
+    }
+
+    /* change la taille de la profondeur */
+    function changeProfondeur() {
+    var texte = document.getElementsByTagName('h6')[3];
+    var profondeur = document.getElementById('profondeur');
+    ctx.lineWidth = profondeur.value;
+    texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + "cm)";
+    drawP();
+    renameImage();
+    }
+
+    /* convertit les cm en pixels */
+    function convertCmToPx(cm) {
+        return (96 / 2.54) * cm;        // https://www.pixelto.net/cm-to-px-converter
+    }
+
+    /* convertit les pixels en cm */
+    function convertPxToCm(px) {
+        return (2.54 / 96) * px;    // https://www.pixelto.net/px-to-cm-converter
+    }
+
+    /* convertit les mm en pixels */
+    function convertMmToPx(mm) {
+        return convertCmToPx(mm) / 10;
+    }
+
+    /* convertit les pixels en mm */
+    function convertPxToMm(px) {
+        return convertPxToCm(px) * 10;
+    }
+
+    /* dessine le patron */
+    function drawP() {
+        ctx.fillStyle = "#ffffff";
+        if(dl) {
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        } else {
+            ctx.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
+        }
+        var largeur = document.getElementById('largeur');
+        var hauteur = document.getElementById('hauteur');
+        var profondeur = document.getElementById('profondeur');
+        ctx.lineWidth = 2;
+
+        var l = convertMmToPx(largeur.value);
+        var h = convertMmToPx(hauteur.value);
+        var p = convertMmToPx(profondeur.value);
+        
+        //tests 1cm
+        ctx.beginPath();
+        ctx.moveTo(10, 10);
+        ctx.lineTo(37+10, 10);
+        ctx.moveTo(10, 10);
+        ctx.lineTo(10, 37+10);
+        ctx.stroke();
+
+        if(!dl) {
+        //schema boite couleur
+        // le contour
+        ctx.beginPath();
+        var x = canvas.width - 50;
+        var y = canvas.height - 50;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+20, y-10);
+        ctx.lineTo(x+40, y);
+        ctx.lineTo(x+40, y+30);
+        ctx.lineTo(x+20, y+40);
+        ctx.lineTo(x, y+30);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        //la fente en biais
+        ctx.beginPath()
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+20, y+20);
+        ctx.lineTo(x+40, y+10);
+        ctx.stroke();
+        //le trait rose
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.strokeStyle = "#5f0340";
+        ctx.lineTo(x+20, y+10);
+        ctx.stroke();
+        // le trait bleu
+        ctx.beginPath();
+        ctx.moveTo(x+20, y+10);
+        ctx.strokeStyle = "#000fff";;
+        ctx.lineTo(x+40, y);
+        ctx.stroke();
+        //le trait vert
+        ctx.beginPath()
+        ctx.strokeStyle = "#029450";
+        ctx.moveTo(x+20, y+10);
+        ctx.lineTo(x+20, y+40);
+        ctx.stroke();
+
+        ctx.strokeStyle = "#000000";
+        }
+
+
+        ctx.beginPath();
+        // les 3 carrés
+        x = Math.round(h/3) + convertCmToPx(1);
+        if (p>h){
+            y = p + convertCmToPx(1);
+        } else {
+            y = h + convertCmToPx(1);
+        }
+        ctx.beginPath();
+        // 1er carré
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+p, y);
+        ctx.lineTo(x+p, y+l);
+        ctx.lineTo(x, y+l);
+        ctx.lineTo(x, y);
+        //2ieme carré
+        x = x+p;
+        y + y+l;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+h, y);
+        ctx.lineTo(x+h, y+l);
+        ctx.lineTo(x, y+l);
+        //3ieme carré
+        x = x+h;
+        y + y+l;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+p, y);
+        ctx.lineTo(x+p, y+l);
+        ctx.lineTo(x, y+l);
+
+        //deux deux faces sur les cotés
+        //celle de droite (en haut)
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y-h);
+        ctx.lineTo(x+p, y-h);
+        ctx.lineTo(x+p, y);
+        //celle de gauche (en bas)
+        ctx.moveTo(x, y+l);
+        ctx.lineTo(x, y+l+h);
+        ctx.lineTo(x+p, y+l+h);
+        ctx.lineTo(x+p, y+l);
+
+        // face 2/3 - 1/3
+        // plus grande partie : 2/3
+        x=x+p;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+Math.round(h/3)*2, y);
+        ctx.lineTo(x+Math.round(h/3)*2, y+l);
+        ctx.lineTo(x, y+l);
+        // plus petite partie : 1/3
+        x=x-2*p-h;
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-Math.round(h/3), y);
+        ctx.lineTo(x-Math.round(h/3), y+l);
+        ctx.lineTo(x, y+l);
+
+        //deux deux face en biais, partie haute (1/3)
+        //celle de droite (en haut)
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y-Math.round(h/3));
+        ctx.moveTo(x+p, y);
+        ctx.lineTo(x+p, y);
+        ctx.lineTo(x, y-Math.round(h/3));
+        //celle de gauche (en bas)
+        ctx.moveTo(x, y+l);
+        ctx.lineTo(x, y+l+Math.round(h/3));
+        ctx.moveTo(x+p, y+l);
+        ctx.lineTo(x+p, y+l);
+        ctx.lineTo(x, y+l+Math.round(h/3));
+
+        ctx.stroke();
+
+        //les langettes de colle
+        //1ieres
+        //haut
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-Math.round(h/3), y);
+        ctx.lineTo(x, y-p);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        //bas
+        y = y+l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-Math.round(h/3), y);
+        ctx.lineTo(x, y+p);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        
+        //2iemes
+        //haut
+        x=x+p;
+        y=y-l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertMmToPx(1), y-p/2);
+        ctx.lineTo(x+h-convertMmToPx(1), y-p/2);
+        ctx.lineTo(x+h, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        //bas
+        y=y+l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertMmToPx(1), y+p/2);
+        ctx.lineTo(x+h-convertMmToPx(1), y+p/2);
+        ctx.lineTo(x+h, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+
+        //3iemes
+        //haut
+        x=x+p+h;
+        y=y-l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertMmToPx(1), y-p/2);
+        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y-p/2);
+        ctx.lineTo(x+Math.round(h/3)*2, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+        //bas
+        y=y+l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertMmToPx(1), y+p/2);
+        ctx.lineTo(x+Math.round(h/3)*2-convertMmToPx(1), y+p/2);
+        ctx.lineTo(x+Math.round(h/3)*2, y);
+        ctx.lineTo(x, y);
+        ctx.fillStyle = "#b5b6b6";
+        ctx.fill();
+        ctx.stroke();
+
+        //attache de fermeture
+        //bas (droite)
+            // premiere partie
+        x=x+Math.round(h/3)*2
+        y=y-l;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertCmToPx(0.5), y);
+        ctx.lineTo(x+convertCmToPx(0.5), y+l);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+            // effacer la ligne (oui, c'est du bricolage j'ai la flemme d'aller effacer la ligne ou ce trait est dessiné)
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 2;
+            // deuxieme partie
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x+convertCmToPx(1), y);
+        ctx.lineTo(x+convertCmToPx(1), y+l);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+        //haut (gauche)
+        x=x-2*p-2*h;//+Math.round(h/3)*2
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x-convertCmToPx(0.5), y);
+        ctx.lineTo(x-convertCmToPx(0.5), y+l);
+        ctx.lineTo(x, y+l);
+        ctx.stroke();
+
+
+    }
+
+    /* dessine le canevas */
+    function drawC() {
+        var texteL = document.getElementsByTagName('h6')[1];
+        var largeur = document.getElementById('largeur');
+        var texteH = document.getElementsByTagName('h6')[2];
+        var hauteur = document.getElementById('hauteur');
+        var texteP = document.getElementsByTagName('h6')[3];
+        var profondeur = document.getElementById('profondeur');
+        largeur.value = 30;
+        hauteur.value = 30;
+        profondeur.value = 30;
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        //console.log(bgColor.value);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
+        texteL.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
+        texteH.innerHTML = "Hauteur : " + hauteur.value + " mm (" + largeur.value/10 + "cm)";
+        texteP.innerHTML = "Profondeur : " + profondeur.value + " mm (" + largeur.value/10 + "cm)";
+        ctx.strokeStyle = "#000000"
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, 793);
+        ctx.lineTo(1122, 793);
+        ctx.lineTo(1122, 0);
+        ctx.lineTo(0, 0);
+        ctx.stroke();
+
+        drawP();
+        /*
+        moveto(0,0)
+        lineto(0,y) : |
+        lineto(x,0) : -
+        */
+    }
+</script>
+
+</html>
