@@ -387,41 +387,25 @@ function downloadPNG()
     image.src = 'data:image/svg+xml;base64,' + btoa(inline_svg); 
 }
 
-function downloadPDF(){
+function downloadPDF(full_page){
   var svg_text = document.getElementById("svg-container").innerHTML.toString();
   var svg_width = Number(svg_text.substring(12, 15));
   var svg_height = Number(svg_text.substring(25, 28));
-  const scale = 0.5;
+  const scale = full_page ? 2 : 0.6;
   svg_width *= scale;
   svg_height *= scale;
-  var new_svg_text = svg_text.replace(/<svg width="\d{3}" height="\d{3}"/i, `<svg width="${svg_width}" height="${svg_height}" margin="10"`);
+  var new_svg_text = svg_text.replace(/<svg width="\d{3}" height="\d{3}"/i, `<svg width="${svg_width}" height="${svg_height}" style="margin:10"`);
 
   let mywindow = window.open('', 'PRINT', 'height=650,width=900,top=100,left=150');
 
   mywindow.document.write(`<html><head><title>Dot Calendar</title>`);
-  /*mywindow.document.write(`<style type="text/css" media="print"> 
-    @page { size: landscape; }
+  mywindow.document.write(`<style type="text/css" media="print"> 
+    @page { size: ${full_page ? "landscape" : "portrait"}; }
     </style>`);
-  mywindow.document.write(` <style>
-       @media print {
-    body {
-        transform: scale(0.9);
-        transform-origin: 0 0;
-    }
-}
-    </style>`);*/
   mywindow.document.write('</head><body >');
-  //svggg.style.width = 300;
-  //mywindow.document.write(`<p>aaabbbcc ${svg_text.substring(4,50)}</p>`);
-  //mywindow.document.write(`<p>aaabbbcc ${new_svg_text.substring(4,50)}</p>`);
-  //mywindow.document.write(`<p>aaabbbcc ${svg_width} ${svg_height}</p>`);
-  //mywindow.document.write(svggg.innerHTML);
-  mywindow.document.write(new_svg_text);
-  mywindow.document.write(new_svg_text);
-  mywindow.document.write(new_svg_text);
- // mywindow.document.write(document.getElementById("svg-container").innerHTML);
- // mywindow.document.write(document.getElementById("svg-container").innerHTML);
- // mywindow.document.write(document.getElementById("svg-container").innerHTML);
+  for (let i = 1; i <= (full_page ? 1 : 12); i++) {
+    mywindow.document.write(new_svg_text);
+  }
   mywindow.document.write('</body></html>');
 
 
