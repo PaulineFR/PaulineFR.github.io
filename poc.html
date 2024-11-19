@@ -5,60 +5,87 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <label for="year">Année</label>
-  <input id="year" type="number" min="1900" max="3000" value="2025" onchange="generate()" />
-  <br/>
 
-  <label for="weekend">Weekends affichés</label>
-  <label class="switch" >
-    <input type="checkbox" id="weekend" onchange="generate()" checked>
-    <span class="slider round"></span>
-  </label>
-  <br/>
+  <div id="page"><div class="flex-contrainer">
 
-  <label for="week">Semaines affichées</label>
-  <label class="switch" >
-    <input type="checkbox" id="week" onchange="generate()" checked>
-    <span class="slider round"></span>
-  </label>
-  <br/>
+    <div id="title" class="flex-item">
+      <h1>Dot Calendar</h1>
+      <p>Bienvenue dans le générateur de calendrier à point. Il peut vous aider à tracker les habits, l'arrosage de vos plantes, la prise de médicaments, les règles, etc...</p>
+    </div>
 
-  <label for="weekday">Jour de la semaine affiché</label>
-  <label class="switch" >
-    <input type="checkbox" id="weekday" onchange="toggleCircleTextNo()">
-    <span class="slider round"></span>
-  </label>
-  <br/>
+    <div id="form" class="flex-item flex-contrainer">
 
-  <label for="weekno">Numéro de la semaine affiché</label>
-  <label class="switch" >
-    <input type="checkbox" id="weekno" onchange="toggleCircleTextLetter()">
-    <span class="slider round"></span>
-  </label>
-  <br/>
+      <p>
+        <label for="year">Année</label>
+        <input id="year" type="number" min="1900" max="3000" onchange="generate()" />
+      </p>
 
-  <label for="past">Past blacked out</label>
-  <label class="switch" >
-    <input type="checkbox" id="past" onchange="generate()" checked>
-    <span class="slider round"></span>
-  </label>
-  <br/>
+      <p>
+        <label for="weekend">Weekends affichés</label>
+        <label class="switch" >
+          <input type="checkbox" id="weekend" onchange="generate()" checked>
+          <span class="slider round"></span>
+        </label>
+      </p>
 
-  <label for="vertical">Vertical</label>
-  <label class="switch" >
-    <input type="checkbox" id="vertical" onchange="generate()">
-    <span class="slider round"></span>
-  </label>
-  <br/>
+      <p>
+        <label for="week">Semaines affichées</label>
+        <label class="switch" >
+          <input type="checkbox" id="week" onchange="generate()" checked>
+          <span class="slider round"></span>
+        </label>
+      </p>
 
-  <button type="button" onclick="downloadSVG()">SVG</button>
-  <button type="button" onclick="downloadPNG()">PNG</button>
-  <button type="button" onclick="downloadPDF(false)">PDF</button>
-  <button type="button" onclick="downloadPDF(true)">PDF (print full page)</button>
-  <br/>
+      <p>
+        <label for="weekday">Jour de la semaine affiché</label>
+        <label class="switch" >
+          <input type="checkbox" id="weekday" onchange="toggleCircleTextNo()">
+          <span class="slider round"></span>
+        </label>
+      </p>
 
-  <p id="test"></p>
-  <div id="svg-container"></div>
+      <p>
+        <label for="weekno">Numéro de la semaine affiché</label>
+        <label class="switch" >
+          <input type="checkbox" id="weekno" onchange="toggleCircleTextLetter()">
+          <span class="slider round"></span>
+        </label>
+      </p>
+
+      <p>
+        <label for="past">Past blacked out</label>
+        <label class="switch" >
+          <input type="checkbox" id="past" onchange="generate()" checked>
+          <span class="slider round"></span>
+        </label>
+      </p>
+
+      <p>
+        <label for="vertical">Vertical</label>
+        <label class="switch" >
+          <input type="checkbox" id="vertical" onchange="generate()">
+          <span class="slider round"></span>
+        </label>
+      </p>
+
+
+    </div>
+
+    <div class="flex-item">
+
+      <p>Exports :</p>
+      <button type="button" onclick="downloadSVG()">SVG</button>
+      <button type="button" onclick="downloadPNG()">PNG</button>
+      <button type="button" onclick="downloadPDF(false)">PDF</button>
+      <button type="button" onclick="downloadPDF(true)">PDF (print full page)</button>
+
+    </div>
+
+    <div class="flex-item">
+      <div id="svg-container"></div>
+    </div>
+
+  </div></div>
  
 
 
