@@ -7,6 +7,10 @@
     <title>Patron de boite pour les jeux de papa</title>
     <style>
 
+    body{
+        font-family: 'Arial';
+    }
+
     input[type='range'] {
       overflow: hidden;
       width: 80px;
@@ -62,6 +66,8 @@
     <input id="hauteur" type="range" min="20" max="65" value="30" onchange="changeHauteur();">
     <h6></h6>
     <input id="profondeur" type="range" min="20" max="65" value="30" onchange="changeProfondeur();">
+    <h6>Mode Tobago</h6>
+    <button id="tobago_toggle" onclick="ToggleTobago();" style="width: 50px;height: 20px;">OFF</button>
     <h6>Download</h6>
     <a className="download-link" href="" download="monImage.png">⇓ here ⇓</a>
 </body>
@@ -74,6 +80,17 @@
     console.log(convertCmToPx(1));
 
     var dl = false;
+
+    var tobago = false;
+
+    /* Toggle Tobago Mode */
+
+    function ToggleTobago(){
+        tobago = !tobago;
+        var btn = document.getElementById('tobago_toggle');
+        btn.innerHTML = tobago ? "ON" : "OFF";
+        drawP();
+    }
 
     /* pour télécharger le dessin */
     document.getElementsByTagName('a')[0].addEventListener("click", function (evt) {
@@ -150,6 +167,17 @@
 
     /* dessine le patron */
     function drawP() {
+
+        var wood_image = new Image();
+        //wood_image.src = "C:/perso/projets_persos/dot_calendar/projet/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
+        //wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
+        wood_image.src = "./coffre_tobagoxcf.png";
+
+        // Make sure the image is loaded first otherwise nothing will draw.
+        wood_image.onload = function(){
+
+
+
         ctx.fillStyle = "#ffffff";
         if(dl) {
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -231,6 +259,11 @@
         ctx.lineTo(x+p, y+l);
         ctx.lineTo(x, y+l);
         ctx.lineTo(x, y);
+        
+        if(tobago){
+            ctx.drawImage(wood_image, x, y, p, l);
+        } 
+
         //2ieme carré
         x = x+p;
         y + y+l;
@@ -238,6 +271,11 @@
         ctx.lineTo(x+h, y);
         ctx.lineTo(x+h, y+l);
         ctx.lineTo(x, y+l);
+        
+        if(tobago){
+            ctx.drawImage(wood_image, x, y, h, l);
+        } 
+
         //3ieme carré
         x = x+h;
         y + y+l;
@@ -246,17 +284,31 @@
         ctx.lineTo(x+p, y+l);
         ctx.lineTo(x, y+l);
 
+        if(tobago){
+            ctx.drawImage(wood_image, x, y, p, l);
+        } 
+
+
         //deux deux faces sur les cotés
         //celle de droite (en haut)
         ctx.moveTo(x, y);
         ctx.lineTo(x, y-h);
         ctx.lineTo(x+p, y-h);
         ctx.lineTo(x+p, y);
+
+        if(tobago){
+            ctx.drawImage(wood_image, x, y-h, p, h);
+        } 
+
         //celle de gauche (en bas)
         ctx.moveTo(x, y+l);
         ctx.lineTo(x, y+l+h);
         ctx.lineTo(x+p, y+l+h);
         ctx.lineTo(x+p, y+l);
+
+        if(tobago){
+            ctx.drawImage(wood_image, x, y+l, p, h);
+        } 
 
         // face 2/3 - 1/3
         // plus grande partie : 2/3
@@ -265,12 +317,21 @@
         ctx.lineTo(x+Math.round(h/3)*2, y);
         ctx.lineTo(x+Math.round(h/3)*2, y+l);
         ctx.lineTo(x, y+l);
+
+        if(tobago){
+            ctx.drawImage(wood_image, x, y, h, l);
+        }
+
         // plus petite partie : 1/3
         x=x-2*p-h;
         ctx.moveTo(x, y);
         ctx.lineTo(x-Math.round(h/3), y);
         ctx.lineTo(x-Math.round(h/3), y+l);
         ctx.lineTo(x, y+l);
+
+        if(tobago){
+            ctx.drawImage(wood_image, x-h, y, h, l);
+        }
 
         //deux deux face en biais, partie haute (1/3)
         //celle de droite (en haut)
@@ -279,12 +340,21 @@
         ctx.moveTo(x+p, y);
         ctx.lineTo(x+p, y);
         ctx.lineTo(x, y-Math.round(h/3));
+
+        if(tobago){
+            ctx.drawImage(wood_image, x, y-h, p, h);
+        }
+
         //celle de gauche (en bas)
         ctx.moveTo(x, y+l);
         ctx.lineTo(x, y+l+Math.round(h/3));
         ctx.moveTo(x+p, y+l);
         ctx.lineTo(x+p, y+l);
         ctx.lineTo(x, y+l+Math.round(h/3));
+
+        if(tobago){
+            ctx.drawImage(wood_image, x, y+l, p, h);
+        }
 
         ctx.stroke();
 
@@ -397,10 +467,16 @@
         ctx.stroke();
 
 
+      
+    }
+
     }
 
     /* dessine le canevas */
     function drawC() {
+        tobago = false;
+        var btn = document.getElementById('tobago_toggle');
+        btn.innerHTML = tobago ? "ON" : "OFF";
         var texteL = document.getElementsByTagName('h6')[1];
         var largeur = document.getElementById('largeur');
         var texteH = document.getElementsByTagName('h6')[2];
