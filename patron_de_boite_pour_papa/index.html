@@ -215,9 +215,9 @@
         const TO_RADIANS = Math.PI/180; 
 
         var wood_image = new Image();
-        wood_image.src = "C:/perso/projets_persos/dot_calendar/projet/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
+        //wood_image.src = "C:/perso/projets_persos/dot_calendar/projet/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
         //wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
-        //wood_image.src = "./coffre_tobagoxcf.png";
+        wood_image.src = "./coffre_tobagoxcf.png";
 
         
         var img_link = document.getElementById('img_src').value;
@@ -317,7 +317,6 @@
             ctx.translate(x, y);
             ctx.rotate(90 * TO_RADIANS);
             ctx.translate(0,-p);
-            //ctx.drawImage(image,0,0);
             ctx.drawImage(wood_image,0, 0, l, p);
             ctx.restore();
         } 
@@ -331,7 +330,6 @@
             let save_x = x;
             let save_y = y;
             gomette_image.onload = function(){
-                //ctx.drawImage(gomette_image, save_x+(p/4), save_y+(l/4), (p/2), (l/2));
                 ctx.save();
                 ctx.translate(save_x+(p/4), save_y+(l/4));
                 ctx.rotate(90 * TO_RADIANS);
@@ -351,7 +349,6 @@
         ctx.lineTo(x, y+l);
         
         if(tobago){
- //           ctx.drawImage(wood_image, x, y, h, l);
             ctx.save();
             ctx.translate(x, y);
             ctx.rotate(-90 * TO_RADIANS);
@@ -369,7 +366,6 @@
         ctx.lineTo(x, y+l);
 
         if(tobago){
- //           ctx.drawImage(wood_image, x, y, p, l);
             ctx.save();
             ctx.translate(x, y);
             ctx.rotate(-90 * TO_RADIANS);
@@ -397,7 +393,6 @@
         ctx.lineTo(x+p, y+l);
 
         if(tobago){
- //           ctx.drawImage(wood_image, x, y+l, p, h);
             ctx.save();
             ctx.translate(x, y+l);
             ctx.rotate(180 * TO_RADIANS);
@@ -414,16 +409,6 @@
         ctx.lineTo(x+Math.round(h/3)*2, y+l);
         ctx.lineTo(x, y+l);
 
-        if(tobago){
- //           ctx.drawImage(wood_image, x, y, h, l);
-            ctx.save();
-            ctx.translate(x, y);
-            ctx.rotate(90 * TO_RADIANS);
-            ctx.translate(0,-h);
-            ctx.drawImage(wood_image,0, 0, l, h);
-            ctx.restore();
-        }
-
         // plus petite partie : 1/3
         x=x-2*p-h;
         ctx.moveTo(x, y);
@@ -432,7 +417,6 @@
         ctx.lineTo(x, y+l);
 
         if(tobago){
- //           ctx.drawImage(wood_image, x-h, y, h, l);
             ctx.save();
             ctx.translate(x-h, y);
             ctx.rotate(90 * TO_RADIANS);
@@ -449,8 +433,8 @@
         ctx.lineTo(x+p, y);
         ctx.lineTo(x, y-Math.round(h/3));
 
+
         if(tobago){
- //           ctx.drawImage(wood_image, x, y-h, p, h);
             ctx.save();
             ctx.translate(x, y-h);
             ctx.rotate(180 * TO_RADIANS);
@@ -543,6 +527,18 @@
         ctx.fillStyle = "#b5b6b6";
         ctx.fill();
         ctx.stroke();
+        
+        // effacer la ligne à ne pas plier
+        ctx.clearRect(x-2+Math.round(h/3)*2, y-l, 4, l);
+        
+        if(tobago){
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(90 * TO_RADIANS);
+            ctx.translate(-l,-h);
+            ctx.drawImage(wood_image,0, 0, l, h);
+            ctx.restore();
+        }
 
         //attache de fermeture
         //bas (droite)
@@ -555,15 +551,7 @@
         ctx.lineTo(x+convertCmToPx(0.5), y+l);
         ctx.lineTo(x, y+l);
         ctx.stroke();
-            // effacer la ligne (oui, c'est du bricolage j'ai la flemme d'aller effacer la ligne ou ce trait est dessiné)
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x, y+l);
-        ctx.stroke();
-        ctx.strokeStyle = "#000000";
-        ctx.lineWidth = 2;
+
             // deuxieme partie
         ctx.beginPath();
         ctx.moveTo(x, y);
