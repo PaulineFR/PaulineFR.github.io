@@ -104,8 +104,8 @@
 </body>
 
 <script>
-    var canevas = document.getElementById('canvas');
-    var ctx = canevas.getContext('2d');
+    //var canevas = document.getElementById('canvas');
+    //var ctx = canevas.getContext('2d');
     console.log(convertCmToPx(21));
     console.log(convertCmToPx(29.7));
     console.log(convertCmToPx(1));
@@ -138,20 +138,40 @@
 
     /* pour télécharger le dessin */
     document.getElementsByTagName('a')[0].addEventListener("click", function (evt) {
+        try{
         dl = true;
-        drawP();
-        var dataURL = canevas.toDataURL();
+       // drawP();
+
+/*
+        const canvas_ = document.getElementById("canvas");
+
+        canvas_.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            evt.target.href = url;
+
+        });
+*/
+
+        
+        var dataURL = document.getElementById('canvas').toDataURL("image/png");
+        dataURL.crossorigin = "Anonymous";
         evt.target.href = dataURL;
         dl = false;
-        ctx.strokeStyle = "#000000"
+        dataURL.revokeObjectURL();
+        /*ctx.strokeStyle = "#000000";
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(0, 793);
         ctx.lineTo(1122, 793);
         ctx.lineTo(1122, 0);
         ctx.lineTo(0, 0);
-        ctx.stroke();
-        drawP();
+        ctx.stroke();*/
+        //drawC();
+        }
+        catch (error) {
+            console.log(error);
+
+        }
     });
 
     /* modifie le nom de l'image téléchargée avec les dimention du patron */
@@ -163,7 +183,7 @@
     function changeLargeur() {
     var texte = document.getElementsByTagName('label')[1];
     var largeur = document.getElementById('largeur');
-    ctx.lineWidth = largeur.value;
+    document.getElementById('canvas').getContext('2d').lineWidth = largeur.value;
     texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
     drawP();
     renameImage();
@@ -173,7 +193,7 @@
     function changeHauteur() {
     var texte = document.getElementsByTagName('label')[2];
     var hauteur = document.getElementById('hauteur');
-    ctx.lineWidth = hauteur.value;
+    document.getElementById('canvas').getContext('2d').lineWidth = hauteur.value;
     texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + "cm)";
     drawP();
     renameImage();
@@ -183,7 +203,7 @@
     function changeProfondeur() {
     var texte = document.getElementsByTagName('label')[3];
     var profondeur = document.getElementById('profondeur');
-    ctx.lineWidth = profondeur.value;
+    document.getElementById('canvas').getContext('2d').lineWidth = profondeur.value;
     texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + "cm)";
     drawP();
     renameImage();
@@ -214,10 +234,11 @@
 
         const TO_RADIANS = Math.PI/180; 
 
+        let ctx = document.getElementById('canvas').getContext('2d');
+
         var wood_image = new Image();
-        //wood_image.src = "C:/perso/projets_persos/dot_calendar/projet/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
-        //wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
-        wood_image.src = "./coffre_tobagoxcf.png";
+        //wood_image.src = "./coffre_tobagoxcf.png";
+        wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
 
         
         var img_link = document.getElementById('img_src').value;
@@ -228,6 +249,7 @@
         // Make sure the image is loaded first otherwise nothing will draw.
         wood_image.onload = function(){
 
+            wood_image.crossOrigin = 'Anonymous';
 
 
         ctx.fillStyle = "#ffffff";
@@ -330,6 +352,7 @@
             let save_x = x;
             let save_y = y;
             gomette_image.onload = function(){
+                gomette_image.crossOrigin = 'Anonymous';
                 ctx.save();
                 ctx.translate(save_x+(p/4), save_y+(l/4));
                 ctx.rotate(90 * TO_RADIANS);
@@ -530,6 +553,10 @@
         
         // effacer la ligne à ne pas plier
         ctx.clearRect(x-2+Math.round(h/3)*2, y-l, 4, l);
+        if(!tobago){
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(x-2+Math.round(h/3)*2, y-l, 5, l);
+        }
         
         if(tobago){
             ctx.save();
@@ -577,6 +604,7 @@
     /* dessine le canevas */
     function drawC() {
         tobago = false;
+        let ctx = document.getElementById('canvas').getContext('2d');
         var btn = document.getElementById('tobago_toggle');
         btn.innerHTML = tobago ? "ON" : "OFF";
         var texteL = document.getElementsByTagName('label')[1];
