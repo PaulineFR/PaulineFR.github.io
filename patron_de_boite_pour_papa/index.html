@@ -104,8 +104,6 @@
 </body>
 
 <script>
-    //var canevas = document.getElementById('canvas');
-    //var ctx = canevas.getContext('2d');
     console.log(convertCmToPx(21));
     console.log(convertCmToPx(29.7));
     console.log(convertCmToPx(1));
@@ -140,33 +138,13 @@
     document.getElementsByTagName('a')[0].addEventListener("click", function (evt) {
         try{
         dl = true;
-       // drawP();
 
-/*
-        const canvas_ = document.getElementById("canvas");
-
-        canvas_.toBlob((blob) => {
-            const url = URL.createObjectURL(blob);
-            evt.target.href = url;
-
-        });
-*/
-
-        
         var dataURL = document.getElementById('canvas').toDataURL("image/png");
         dataURL.crossorigin = "Anonymous";
         evt.target.href = dataURL;
         dl = false;
         dataURL.revokeObjectURL();
-        /*ctx.strokeStyle = "#000000";
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(0, 793);
-        ctx.lineTo(1122, 793);
-        ctx.lineTo(1122, 0);
-        ctx.lineTo(0, 0);
-        ctx.stroke();*/
-        //drawC();
+
         }
         catch (error) {
             console.log(error);
@@ -237,8 +215,8 @@
         let ctx = document.getElementById('canvas').getContext('2d');
 
         var wood_image = new Image();
-        //wood_image.src = "./coffre_tobagoxcf.png";
-        wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
+        wood_image.src = "./coffre_tobagoxcf.png";
+        //wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
 
         
         var img_link = document.getElementById('img_src').value;
@@ -249,7 +227,7 @@
         // Make sure the image is loaded first otherwise nothing will draw.
         wood_image.onload = function(){
 
-            wood_image.crossOrigin = 'Anonymous';
+        wood_image.crossOrigin = 'Anonymous';
 
 
         ctx.fillStyle = "#ffffff";
