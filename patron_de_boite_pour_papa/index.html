@@ -11,6 +11,17 @@
         font-family: 'Arial';
     }
 
+    
+    label {
+        display: inline-block;
+        width: 185px;
+        text-align: right;
+    }
+
+    h1{
+        margin-bottom: 50px;;
+    }
+
     input[type='range'] {
       overflow: hidden;
       width: 80px;
@@ -52,24 +63,44 @@
       box-shadow: -80px 0 0 80px #ff00aa;
     }
 
+    /** flexbox **/
+
+    .flex-container{
+        display: flex; 
+    }
+
+    .flex-item{
+        padding:5px;
+    }
+
     </style>
 </head>
 
 <body onload="drawC();">
-    <canvas id="canvas" width="1122" height="793"></canvas>
-    <h1>Patron de boite pour les jeux de papa</h1>
-    <h6>Reset</h6>
-    <button onclick="drawC();" style="width: 50px;height: 20px;">Ø</button>
-    <h6></h6>
-    <input id="largeur" type="range" min="20" max="65" value="30" onchange="changeLargeur();" >
-    <h6></h6>
-    <input id="hauteur" type="range" min="20" max="65" value="30" onchange="changeHauteur();">
-    <h6></h6>
-    <input id="profondeur" type="range" min="20" max="65" value="30" onchange="changeProfondeur();">
-    <h6>Mode Tobago</h6>
-    <button id="tobago_toggle" onclick="ToggleTobago();" style="width: 50px;height: 20px;">OFF</button>
-    <h6>Download</h6>
-    <a className="download-link" href="" download="monImage.png">⇓ here ⇓</a>
+    <div class="flex-container">
+        <div class="flex-item">
+            <canvas id="canvas" width="1122" height="793"></canvas>
+        </div>
+        <div class="flex-item">
+            <h1>Patron de boite pour les jeux de papa</h1>
+            <label for="reset_btn">Reset</label>
+            <button id="reset_btn" onclick="drawC();" style="width: 50px;height: 20px;">Ø</button><br/><br/>
+            <label for="largeur"></label>
+            <input id="largeur" type="range" min="20" max="65" value="30" onchange="changeLargeur();" ><br/><br/>
+            <label for="hauteur"></label>
+            <input id="hauteur" type="range" min="20" max="65" value="30" onchange="changeHauteur();"><br/><br/>
+            <label for="profondeur"></label>
+            <input id="profondeur" type="range" min="20" max="65" value="30" onchange="changeProfondeur();"><br/><br/>
+            <label for="tobago_toggle">Mode Tobago</label>
+            <button id="tobago_toggle" onclick="ToggleTobago();" style="width: 50px;height: 20px;">OFF</button><br/><br/>
+            <label for="img_src">Lien vers l'image :</label>
+            <input type="text" id="img_src" name="img_src"><br/><br/>
+            <label for="gomette_src">Lien vers la gomette :</label>
+            <input type="text" id="gomette_src" name="gomette_src"><br/><br/>
+            <label for="dl_btn">Download</label>
+            <a className="download-link"  id ="dl_btn" href="" download="monImage.png">⇓ here ⇓</a>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -91,6 +122,19 @@
         btn.innerHTML = tobago ? "ON" : "OFF";
         drawP();
     }
+
+    document.getElementById('img_src').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            drawP();
+        }
+    });
+
+    document.getElementById('gomette_src').addEventListener('keyup', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            drawP();
+        }
+    });
+
 
     /* pour télécharger le dessin */
     document.getElementsByTagName('a')[0].addEventListener("click", function (evt) {
@@ -117,7 +161,7 @@
 
     /* change la taille de la largeur */
     function changeLargeur() {
-    var texte = document.getElementsByTagName('h6')[1];
+    var texte = document.getElementsByTagName('label')[1];
     var largeur = document.getElementById('largeur');
     ctx.lineWidth = largeur.value;
     texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
@@ -127,7 +171,7 @@
 
     /* change la taille de la hauteur */
     function changeHauteur() {
-    var texte = document.getElementsByTagName('h6')[2];
+    var texte = document.getElementsByTagName('label')[2];
     var hauteur = document.getElementById('hauteur');
     ctx.lineWidth = hauteur.value;
     texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + "cm)";
@@ -137,7 +181,7 @@
 
     /* change la taille de la profondeur */
     function changeProfondeur() {
-    var texte = document.getElementsByTagName('h6')[3];
+    var texte = document.getElementsByTagName('label')[3];
     var profondeur = document.getElementById('profondeur');
     ctx.lineWidth = profondeur.value;
     texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + "cm)";
@@ -169,9 +213,15 @@
     function drawP() {
 
         var wood_image = new Image();
-        //wood_image.src = "C:/perso/projets_persos/dot_calendar/projet/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
+        wood_image.src = "C:/perso/projets_persos/dot_calendar/projet/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
         //wood_image.src = "https://paulinefr.github.io/patron_de_boite_pour_papa/coffre_tobagoxcf.png";
-        wood_image.src = "./coffre_tobagoxcf.png";
+        //wood_image.src = "./coffre_tobagoxcf.png";
+
+        
+        var img_link = document.getElementById('img_src').value;
+        if(img_link !== "") {
+            wood_image.src = img_link;
+        }
 
         // Make sure the image is loaded first otherwise nothing will draw.
         wood_image.onload = function(){
@@ -261,8 +311,28 @@
         ctx.lineTo(x, y);
         
         if(tobago){
-            ctx.drawImage(wood_image, x, y, p, l);
+            //ctx.save();
+            //ctx.translate(x, y);
+            //ctx.rotate(90* Math.PI / 180);
+            //ctx.translate(0,-x);
+            //ctx.drawImage(image,0,0);
+            ctx.drawImage(wood_image,x, y, p, l);
+            //ctx.restore();
         } 
+
+        /** ajout d'une gomette si un lien est entrée dans l'input **/
+
+        var gomette_image = new Image(); 
+        var gomette_img_link = document.getElementById('gomette_src').value; 
+        if(gomette_img_link !== "") {
+            gomette_image.src = gomette_img_link ;
+            let save_x = x;
+            let save_y = y;
+            gomette_image.onload = function(){
+                ctx.drawImage(gomette_image, save_x+(p/4), save_y+(l/4), (p/2), (l/2));
+            }
+        }
+
 
         //2ieme carré
         x = x+p;
@@ -273,7 +343,7 @@
         ctx.lineTo(x, y+l);
         
         if(tobago){
-            ctx.drawImage(wood_image, x, y, h, l);
+ //           ctx.drawImage(wood_image, x, y, h, l);
         } 
 
         //3ieme carré
@@ -285,7 +355,7 @@
         ctx.lineTo(x, y+l);
 
         if(tobago){
-            ctx.drawImage(wood_image, x, y, p, l);
+ //           ctx.drawImage(wood_image, x, y, p, l);
         } 
 
 
@@ -297,7 +367,7 @@
         ctx.lineTo(x+p, y);
 
         if(tobago){
-            ctx.drawImage(wood_image, x, y-h, p, h);
+ //           ctx.drawImage(wood_image, x, y-h, p, h);
         } 
 
         //celle de gauche (en bas)
@@ -307,7 +377,7 @@
         ctx.lineTo(x+p, y+l);
 
         if(tobago){
-            ctx.drawImage(wood_image, x, y+l, p, h);
+ //           ctx.drawImage(wood_image, x, y+l, p, h);
         } 
 
         // face 2/3 - 1/3
@@ -319,7 +389,7 @@
         ctx.lineTo(x, y+l);
 
         if(tobago){
-            ctx.drawImage(wood_image, x, y, h, l);
+ //           ctx.drawImage(wood_image, x, y, h, l);
         }
 
         // plus petite partie : 1/3
@@ -330,7 +400,7 @@
         ctx.lineTo(x, y+l);
 
         if(tobago){
-            ctx.drawImage(wood_image, x-h, y, h, l);
+ //           ctx.drawImage(wood_image, x-h, y, h, l);
         }
 
         //deux deux face en biais, partie haute (1/3)
@@ -342,7 +412,7 @@
         ctx.lineTo(x, y-Math.round(h/3));
 
         if(tobago){
-            ctx.drawImage(wood_image, x, y-h, p, h);
+ //           ctx.drawImage(wood_image, x, y-h, p, h);
         }
 
         //celle de gauche (en bas)
@@ -353,7 +423,7 @@
         ctx.lineTo(x, y+l+Math.round(h/3));
 
         if(tobago){
-            ctx.drawImage(wood_image, x, y+l, p, h);
+ //           ctx.drawImage(wood_image, x, y+l, p, h);
         }
 
         ctx.stroke();
@@ -477,11 +547,11 @@
         tobago = false;
         var btn = document.getElementById('tobago_toggle');
         btn.innerHTML = tobago ? "ON" : "OFF";
-        var texteL = document.getElementsByTagName('h6')[1];
+        var texteL = document.getElementsByTagName('label')[1];
         var largeur = document.getElementById('largeur');
-        var texteH = document.getElementsByTagName('h6')[2];
+        var texteH = document.getElementsByTagName('label')[2];
         var hauteur = document.getElementById('hauteur');
-        var texteP = document.getElementsByTagName('h6')[3];
+        var texteP = document.getElementsByTagName('label')[3];
         var profondeur = document.getElementById('profondeur');
         largeur.value = 30;
         hauteur.value = 30;
