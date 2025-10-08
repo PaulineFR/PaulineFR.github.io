@@ -18,13 +18,32 @@
         text-align: right;
     }
 
+    label[for="profondeur"], label[for="hauteur"], label[for="largeur"]{
+        display: block !important;
+        width: 350px !important;
+        text-align: center !important;
+    }
+
     h1{
-        margin-bottom: 50px;;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+
+    p{
+        text-align: center;
+    }
+
+    .warning-ok{
+        color: green;
+    }
+
+    .warning-ko{
+        color: red;
     }
 
     input[type='range'] {
       overflow: hidden;
-      width: 80px;
+      width: 350px;
       -webkit-appearance: none;
     }
     
@@ -42,7 +61,7 @@
 
     #largeur::-webkit-slider-thumb {
       background: #000fff;
-      box-shadow: -80px 0 0 80px #00ffff;
+      box-shadow: -350px 0 0 350px #00ffff;
     }
 
     #hauteur {
@@ -51,7 +70,7 @@
 
     #hauteur::-webkit-slider-thumb {
       background: #029450;
-      box-shadow: -80px 0 0 80px #00ff88;
+      box-shadow: -350px 0 0 350px #00ff88;
     }
 
     #profondeur {
@@ -60,7 +79,7 @@
 
     #profondeur::-webkit-slider-thumb {
       background: #5f0340;
-      box-shadow: -80px 0 0 80px #ff00aa;
+      box-shadow: -350px 0 0 350px #ff00aa;
     }
 
     /** flexbox **/
@@ -85,12 +104,13 @@
             <h1>Patron de boite pour les jeux de papa</h1>
             <label for="reset_btn">Reset</label>
             <button id="reset_btn" onclick="drawC();" style="width: 50px;height: 20px;">Ø</button><br/><br/>
+            <p id="size_warning" class="warning-ok">Le patron tient sur une feuille A4.</p>
             <label for="largeur"></label>
-            <input id="largeur" type="range" min="20" max="65" value="30" onchange="changeLargeur();" ><br/><br/>
+            <input id="largeur" type="range" min="20" max="200" value="30" onchange="changeLargeur();" ><br/><br/>
             <label for="hauteur"></label>
-            <input id="hauteur" type="range" min="20" max="65" value="30" onchange="changeHauteur();"><br/><br/>
+            <input id="hauteur" type="range" min="20" max="100" value="30" onchange="changeHauteur();"><br/><br/>
             <label for="profondeur"></label>
-            <input id="profondeur" type="range" min="20" max="65" value="30" onchange="changeProfondeur();"><br/><br/>
+            <input id="profondeur" type="range" min="20" max="150" value="30" onchange="changeProfondeur();"><br/><br/>
             <label for="tobago_toggle">Mode Tobago</label>
             <button id="tobago_toggle" onclick="ToggleTobago();" style="width: 50px;height: 20px;">OFF</button><br/><br/>
             <label for="img_src">Lien vers l'image :</label>
@@ -104,9 +124,23 @@
 </body>
 
 <script>
-    console.log(convertCmToPx(21));
-    console.log(convertCmToPx(29.7));
+
+    const A4_WIDTH_CM            = 21;
+    const A4_HEIGHT_CM           = 29.7;
+    const LANGUETTE_FERMETURE_CM = 0.5;
+
+    console.log(convertCmToPx(A4_WIDTH_CM));
+    console.log(convertCmToPx(A4_HEIGHT_CM));
     console.log(convertCmToPx(1));
+
+    const A4_WIDTH_PXL  = 793;
+    const A4_HEIGHT_PXL = 1122;
+
+    const WARNING_OK_TXT = "Le patron tient sur une feuille A4.";
+    const WARNING_KO_TXT = "Le patron ne tient pas sur une feuille A4.";
+
+    const WARNING_OK_CSS_CLASS = "warning-ok";
+    const WARNING_KO_CSS_CLASS = "warning-ko";
 
     var dl = false;
 
@@ -162,9 +196,10 @@
     var texte = document.getElementsByTagName('label')[1];
     var largeur = document.getElementById('largeur');
     document.getElementById('canvas').getContext('2d').lineWidth = largeur.value;
-    texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
+    texte.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + " cm)";
     drawP();
     renameImage();
+    check_size_A4();
     }
 
     /* change la taille de la hauteur */
@@ -172,9 +207,10 @@
     var texte = document.getElementsByTagName('label')[2];
     var hauteur = document.getElementById('hauteur');
     document.getElementById('canvas').getContext('2d').lineWidth = hauteur.value;
-    texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + "cm)";
+    texte.innerHTML = "Hauteur : " + hauteur.value + " mm (" + hauteur.value/10 + " cm)";
     drawP();
     renameImage();
+    check_size_A4();
     }
 
     /* change la taille de la profondeur */
@@ -182,9 +218,10 @@
     var texte = document.getElementsByTagName('label')[3];
     var profondeur = document.getElementById('profondeur');
     document.getElementById('canvas').getContext('2d').lineWidth = profondeur.value;
-    texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + "cm)";
+    texte.innerHTML = "Profondeur : " + profondeur.value + " mm (" + profondeur.value/10 + " cm)";
     drawP();
     renameImage();
+    check_size_A4();
     }
 
     /* convertit les cm en pixels */
@@ -205,6 +242,56 @@
     /* convertit les pixels en mm */
     function convertPxToMm(px) {
         return convertPxToCm(px) * 10;
+    }
+
+    /**
+     * Vérifie si le patron tiens sur une feuille A4.
+     * Affiche un message de confirmation en vert le cas échéant.
+     * Affiche un warning en rouge si ce n'est pas le cas.
+     */
+    function check_size_A4(){
+        let largeur    = Number(document.getElementById('largeur').value);
+        let hauteur    = Number(document.getElementById('hauteur').value);
+        let profondeur = Number(document.getElementById('profondeur').value);
+        let warning    = document.getElementById('size_warning');
+
+        let is_width_ok  = check_size_A4_width(largeur, hauteur, profondeur);
+        let is_height_ok = check_size_A4_heigth(profondeur, hauteur);
+
+        if(is_width_ok && is_height_ok){
+            warning.innerHTML = WARNING_OK_TXT;
+            if(warning.classList.contains(WARNING_KO_CSS_CLASS)){
+                warning.classList.remove(WARNING_KO_CSS_CLASS);
+            }
+            warning.classList.add(WARNING_OK_CSS_CLASS)
+        }
+        else{
+            warning.innerHTML = WARNING_KO_TXT;
+            if(warning.classList.contains(WARNING_OK_CSS_CLASS)){
+                warning.classList.remove(WARNING_OK_CSS_CLASS);
+            }
+            warning.classList.add(WARNING_KO_CSS_CLASS)
+        }
+    }
+
+    /**
+     * La largeur d'une feuille A4 est 21cm.
+     * La largeur du patron est soit
+     * 1 x la largeur  +  2 x la profonfeur  +  ?? la marge du début du trait
+     * soit
+     * 1 x la largeur  +  2 x la hauteur  +  ?? la marge du début du trait
+     */
+    function check_size_A4_width(l, h, p){
+        return Math.max(( l + 2 * p), (l + 2 * h))  <= A4_WIDTH_CM * 10;
+    }
+
+    /**
+     * La hauteur d'une feuille A4 est 29,7cm.
+     * La hauteur du patron est
+     * 2 x la pronfondeur  +  2 x la hauteur  +  1,5cm pour la languette de fermeture  +  ?? la marge du débuut du trait
+     */
+    function check_size_A4_heigth(p, h){
+        return (2 * p + 2 * h + LANGUETTE_FERMETURE_CM*3) <= A4_HEIGHT_CM * 10;
     }
 
     /* dessine le patron */
@@ -457,7 +544,7 @@
 
         ctx.stroke();
 
-        //les langettes de colle
+        //les languettes de colle
         //1ieres
         //haut
         ctx.beginPath();
@@ -545,31 +632,31 @@
             ctx.restore();
         }
 
-        //attache de fermeture
+        //languette de fermeture
         //bas (droite)
             // premiere partie
         x=x+Math.round(h/3)*2
         y=y-l;
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+convertCmToPx(0.5), y);
-        ctx.lineTo(x+convertCmToPx(0.5), y+l);
+        ctx.lineTo(x+convertCmToPx(LANGUETTE_FERMETURE_CM), y);
+        ctx.lineTo(x+convertCmToPx(LANGUETTE_FERMETURE_CM), y+l);
         ctx.lineTo(x, y+l);
         ctx.stroke();
 
             // deuxieme partie
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x+convertCmToPx(1), y);
-        ctx.lineTo(x+convertCmToPx(1), y+l);
+        ctx.lineTo(x+convertCmToPx(LANGUETTE_FERMETURE_CM*2), y);
+        ctx.lineTo(x+convertCmToPx(LANGUETTE_FERMETURE_CM*2), y+l);
         ctx.lineTo(x, y+l);
         ctx.stroke();
         //haut (gauche)
         x=x-2*p-2*h;//+Math.round(h/3)*2
         ctx.beginPath();
         ctx.moveTo(x, y);
-        ctx.lineTo(x-convertCmToPx(0.5), y);
-        ctx.lineTo(x-convertCmToPx(0.5), y+l);
+        ctx.lineTo(x-convertCmToPx(LANGUETTE_FERMETURE_CM), y);
+        ctx.lineTo(x-convertCmToPx(LANGUETTE_FERMETURE_CM), y+l);
         ctx.lineTo(x, y+l);
         ctx.stroke();
 
@@ -600,15 +687,15 @@
         //console.log(bgColor.value);
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(1, 1, canvas.width - 2, canvas.height - 2);
-        texteL.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + "cm)";
-        texteH.innerHTML = "Hauteur : " + hauteur.value + " mm (" + largeur.value/10 + "cm)";
-        texteP.innerHTML = "Profondeur : " + profondeur.value + " mm (" + largeur.value/10 + "cm)";
+        texteL.innerHTML = "Largeur : " + largeur.value + " mm (" + largeur.value/10 + " cm)";
+        texteH.innerHTML = "Hauteur : " + hauteur.value + " mm (" + largeur.value/10 + " cm)";
+        texteP.innerHTML = "Profondeur : " + profondeur.value + " mm (" + largeur.value/10 + " cm)";
         ctx.strokeStyle = "#000000"
         ctx.beginPath();
         ctx.moveTo(0, 0);
-        ctx.lineTo(0, 793);
-        ctx.lineTo(1122, 793);
-        ctx.lineTo(1122, 0);
+        ctx.lineTo(0, A4_WIDTH_PXL);
+        ctx.lineTo(A4_HEIGHT_PXL, A4_WIDTH_PXL);
+        ctx.lineTo(A4_HEIGHT_PXL, 0);
         ctx.lineTo(0, 0);
         ctx.stroke();
 
